@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FocusTracker</title>
+    <link rel="stylesheet" href="../css/nav-styles.css">
+    <link rel="stylesheet" href="../css/general-styles.css">
+    <link rel="stylesheet" href="../css/normalize.css">
+</head>
+<body>
+    <main>
+        <!-- NAVBAR -->
+        <nav>
+            <ul class="nav-options-container">
+                <li id="show-stopwatch-window" class="nav-option left-option">
+                    <span class="nav-text">Stopwatch</span>
+                </li>
+                <li id="show-reports-window" class="nav-option right-option">
+                    <span class="nav-text">Reports</span>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- STOPWATCH WINDOW -->
+        <div class="window">
+            <div class="clock-container">
+                <span id="hours-text" class="time-unit-text small-clock">01</span>
+                <span id="minutes-text" class="time-unit-text small-clock">30</span>
+                <span id="seconds-text" class="time-unit-text small-clock">12</span>
+            </div>
+            <div class="start-stop-btn-container">
+                <button id="start-stop-btn">
+                    Start
+                </button>
+            </div>
+            <div class="tasks-container">
+
+            </div>
+        </div>
+
+        <!-- REPORTS WINDOW -->
+        <div class="window hide-window"></div>
+    </main>
+</body>
+</html>
