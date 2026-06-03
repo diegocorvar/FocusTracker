@@ -1,46 +1,139 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FocusTracker</title>
-    <link rel="stylesheet" href="../css/nav-styles.css">
-    <link rel="stylesheet" href="../css/general-styles.css">
-    <link rel="stylesheet" href="../css/normalize.css">
-</head>
-<body>
-    <main>
-        <!-- NAVBAR -->
-        <nav>
-            <ul class="nav-options-container">
-                <li id="show-stopwatch-window" class="nav-option left-option">
-                    <span class="nav-text">Stopwatch</span>
-                </li>
-                <li id="show-reports-window" class="nav-option right-option">
-                    <span class="nav-text">Reports</span>
-                </li>
-            </ul>
-        </nav>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>FocusTracker</title>
+        <link rel="stylesheet" href="../css/nav-styles.css">
+        <link rel="stylesheet" href="../css/general-styles.css">
+        <link rel="stylesheet" href="../css/normalize.css">
+    </head>
+    <body>
+        <main>
+            <!-- NAVBAR -->
+            <nav class="">
+                <ul class="nav-options-container">
+                    <li id="show-stopwatch-window"
+                        class="nav-option left-option">
+                        <span class="nav-text">Stopwatch</span>
+                    </li>
+                    <li id="show-reports-window"
+                        class="nav-option right-option">
+                        <span class="nav-text">Reports</span>
+                    </li>
+                </ul>
+            </nav>
 
-        <!-- STOPWATCH WINDOW -->
-        <div class="window">
-            <div class="clock-container">
-                <span id="hours-text" class="time-unit-text small-clock">01</span>
-                <span id="minutes-text" class="time-unit-text small-clock">30</span>
-                <span id="seconds-text" class="time-unit-text small-clock">12</span>
-            </div>
-            <div class="start-stop-btn-container">
-                <button id="start-stop-btn">
-                    Start
-                </button>
-            </div>
-            <div class="tasks-container">
+            <!-- STOPWATCH WINDOW -->
+            <div class="window">
+                <!-- STOPWATCH -->
+                <div class="clock-container">
+                    <!-- HOURS -->
+                    <span id="hours-text" class="time-unit-text">
+                        <span class="time-unit-digit">0</span>
+                        <span class="time-unit-digit">0</span>
+                    </span>
 
-            </div>
-        </div>
+                    <span class="time-unit-text unit-separator">:</span>
 
-        <!-- REPORTS WINDOW -->
-        <div class="window hide-window"></div>
-    </main>
-</body>
+                    <!-- MINUTES -->
+                    <span id="minutes-text" class="time-unit-text">
+                        <span class="time-unit-digit">0</span>
+                        <span class="time-unit-digit">0</span>
+                    </span>
+
+                    <span class="time-unit-text unit-separator">:</span>
+
+                    <!-- SECONDS -->
+                    <span id="seconds-text" class="time-unit-text">
+                        <span class="time-unit-digit">0</span>
+                        <span class="time-unit-digit">0</span>
+                    </span>
+                </div>
+                <!-- BUTTONS TO CONTROL STOPWATCH -->
+                <div class="action-btn-container">
+                    <!--RESTART TIME -->
+                    <button id="restart-time-btn" class="action-btn" title="Restart stopwatch">
+                        <img class="btn-icon"
+                            src="../assets/icons/restart_time_icon.png">
+                    </button>
+                    <!--START STOP BUTTON -->
+                    <button id="start-stop-btn" class="action-btn" title="Start/stop stopwatch">
+                        <img class="btn-icon"
+                            src="../assets/icons/play_icon.png">
+                    </button>
+                    <!--FINISH FOCUS TRACK -->
+                    <button id="finish-track-btn" class="action-btn" title="End focus track (restart stopwatch)">
+                        <img class="btn-icon"
+                            src="../assets/icons/finish_track_icon.png">
+                    </button>
+                </div>
+                <!-- TASKS -->
+                <div class="tasks-section">
+                    <div class="task-on-focus-container hide">
+                        <h2 class="title">Focusing on:</h2>
+                        <p id="task-on-focus" class="task-text">Terminar este proyecto</p>
+                    </div>
+                    <ul class="tasks-container">
+                        <!-- SELECTED TASK -->
+                        <li class="task selected">
+                            <div>
+                                <input class="task-checkbox" type="checkbox">
+                                <span class="task-text">Terminar este proyecto</span>
+                            </div>
+                            <img
+                                class="task-icon task-settings-btn"
+                                src="../assets/icons/task_options_icon.png"
+                            >
+                        </li>
+                        <!-- TASK OPTIONS MENU -->
+                        <li class="task selected task-options">
+                            <input title="Click to edit" spellcheck="false" class="task-text-inpt" type="text" value="Terminar este proyecto">
+                            <div>
+                                <img
+                                    class="task-icon task-settings-btn delete-task-btn"  
+                                    title="Delete task" 
+                                    src="../assets/icons/delete_task_icon.png"
+                                >
+                                <img
+                                    class="task-icon task-settings-btn"
+                                    title="Save changes"
+                                    src="../assets/icons/save_task_changes_icon.png"
+                                >
+                            </div>
+                        </li>
+                        <!-- FINISHED TASK -->
+                        <li class="task finished">
+                            <div>
+                                <input class="task-checkbox" type="checkbox">
+                                <span class="task-text">Estudiar Anki</span>
+                            </div>
+                            <img 
+                                class="task-icon task-settings-btn" 
+                                src="../assets/icons/task_options_icon.png"
+                            >
+                        </li>
+                        <!-- NORMAL TASK -->
+                        <li class="task">
+                            <div>
+                                <input class="task-checkbox" type="checkbox">
+                                <span class="task-text">Estudiar en freeCodeCamp</span>
+                            </div>
+                            <img 
+                                class="task-icon task-settings-btn" 
+                                src="../assets/icons/task_options_icon.png"
+                            >
+                        </li>
+                        <!-- ADD NEW TASK -->
+                        <li id="add-new-task" class="task">
+                            <span class="task-text">New Task</span><img class="task-icon" src="../assets/icons/add_task_icon.png">
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- REPORTS WINDOW -->
+            <div class="window hide-window"></div>
+        </main>
+    </body>
 </html>

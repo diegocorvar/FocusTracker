@@ -1,10 +1,25 @@
 @font-face {
-    font-family: 'TOMMY Bold';
-    src: url(../assets/fonts/MADE\ TOMMY\ Bold_PERSONAL\ USE.otf);
+    font-family: 'Akzidenz-Grotesk BQ Condensed';
+    src: url(../assets/fonts/akzidenz-grotesk-bq-condensed.ttf);
+}
+
+@font-face {
+    font-family: 'Determination';
+    src: url(../assets/fonts/determination.ttf);
+}
+
+@property --clock-size {
+    syntax: '<length>';
+    inherits: true;
+    initial-value: 160px;
 }
 
 :root {
     --main-bg-color: #191919;
+    --transparent-white: rgba(175, 175, 175, 10%);
+    --selected-task-bg-color: black;
+    --selected-task-border-color: rgba(175, 175, 175, 50%);
+    --finished-task-bg-color: rgb(19, 32, 19);
 }
 
 body {
@@ -23,18 +38,302 @@ main {
     align-items: center;
 
     height: 100%;
-    margin-top: 3.5%;
+    margin-top: 5%;
 }
 
+.hide {
+    display: none !important;
+}
+
+/*===========================================
+STOPWATCH
+===========================================*/
+
 .clock-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 3%;
 }
 
 .time-unit-text {
     color: white;
-    font-size: 10rem;
-    font-family: 'Coolvetica Rg';
+    font-family: 'Akzidenz-Grotesk BQ Condensed';
+    font-weight: bold;
+    font-size: var(--clock-size);
+    letter-spacing: 5px;
+    
+    display: flex;
+    align-items: center;
+
+    transition: --clock-size 0.5s ease;
 }
 
-.time-unit-text:not(:last-child)::after {
-    content: ':';
+.time-unit-digit {
+    font-size: inherit;
+    user-select: none;
+    padding: 0.2em;
+    margin-left: 10px;
+
+    background-color: black;
+
+    border-radius: 10px;
+
+    display: inline-block;
+}
+
+.unit-separator {
+    font-size: 4rem;
+    margin-left: 15px;
+    margin-right: 0px;
+    line-height: 1;
+    display: inline-block;
+}
+
+/*===========================================
+ACTION BUTTONS
+===========================================*/
+
+.action-btn-container {
+    margin-top: 2em;
+    display: flex;
+    justify-content: center;
+    gap: 3em;
+    width: 100%;
+}
+
+.action-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 50px;
+    height: 50px;
+    background-color: transparent;
+
+    cursor: pointer;
+
+    transition: transform 0.9s ease;
+
+    border: none;
+}
+
+.btn-icon {
+    filter: invert();
+    max-width: 50%;
+    transition: transform 0.3s ease;
+}
+
+.action-btn:hover .btn-icon {
+    transform: scale(1.20);
+}
+
+.action-btn:active .btn-icon {
+    transform: scale(0.8);
+}
+
+/*===========================================
+TASKS
+===========================================*/
+
+.tasks-section {
+    display: flex;
+    justify-content: center;
+    flex: 1;
+    width: 100%;
+}
+
+.tasks-container {
+    list-style-type: none;
+    box-sizing: border-box;
+    width: 25%;
+    height: 70%;
+
+    overflow-y: auto;
+
+    background-color: var(--main-bg-color);
+
+    border-radius: 5%;
+    border: 1px solid var(--transparent-white);
+
+    padding: 2rem;
+    margin-top: 2em;
+}
+
+.tasks-container::-webkit-scrollbar {
+    display: none;
+}
+
+.task {
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 1.5em 1em 1.5em;
+    border-bottom: 1px solid var(--transparent-white);
+    border-radius: 5%;
+
+    transition: background-color 0.2s ease;
+}
+
+.task div {
+    display: flex;
+    justify-self: space-between;
+    align-items: center;
+    gap: 0.5em;
+}
+
+.task-checkbox {
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+
+    width: 1.2rem;
+    height: 1.2rem;
+    transform: translateY(-1px);
+    border: 1px solid rgba(175, 175, 175, 50%);
+}
+
+.task-checkbox::after {
+    content: ' ';
+}
+
+.task-checkbox:checked {
+    background-color: green;
+}
+
+.task-checkbox:checked::after {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    content: '✓';
+    font-weight: bold;
+    color: white;
+}
+
+.task-text {
+    color: rgb(245, 245, 245);
+    font-family: 'Determination';
+    letter-spacing: 1px;
+    user-select: none;
+}
+
+.task:hover {
+    background-color: var(--selected-task-bg-color);
+}
+
+.selected {
+    background-color: var(--selected-task-bg-color);
+    border: 1px solid var(--selected-task-border-color);
+}
+
+.selected:hover {
+    background-color: var(--selected-task-bg-color);
+}
+
+.finished {
+    background-color: var(--finished-task-bg-color);
+}
+
+.finished:hover {
+    background-color: var(--finished-task-bg-color);
+}
+
+.finished .task-text {
+    text-decoration: line-through;
+}
+
+.finished:hover, .selected:hover {
+    cursor: default;
+}
+
+#add-new-task {
+    border-bottom: 3px dotted var(--transparent-white);
+    border-radius: 10%;
+    outline-color: transparent;
+
+    transition: outline 0.3s ease;
+}
+
+#add-new-task:hover {
+    outline: 3px dotted var(--transparent-white);
+    border-bottom: none;
+    background-color: transparent;
+}
+
+.task-icon {
+    filter: invert();
+    height: 1.2rem;
+    vertical-align: top;
+}
+
+.task-on-focus-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: top;
+    gap: 0.1rem;
+}
+
+.task-on-focus-container h2 {
+    font-family: 'Determination';
+    font-size: 1rem;
+    color: rgb(131, 131, 131);
+    text-align: center;
+    margin-bottom: 0;
+    user-select: none;
+}
+
+#task-on-focus {
+    border-bottom: 1px solid var(--selected-task-border-color);
+    margin: 0;
+}
+
+/*===========================================
+TASKS OPTIONS
+===========================================*/
+
+.task-options {
+    padding: 3em 1em 3em;
+}
+
+.task-settings-btn {
+    cursor: pointer;
+    filter: invert() brightness(20%);
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.task-settings-btn:hover {
+    transform: scale(1.15);
+    filter: invert() brightness(100%);
+}
+
+.task-settings-btn:active {
+    transform: scale(0.85);
+}
+
+.delete-task-btn {
+    height: 1.5rem;
+}
+
+.delete-task-btn:hover {
+    filter: invert(13%) sepia(80%) saturate(4095%) hue-rotate(348deg) brightness(107%) contrast(90%);
+}
+
+.task-text-inpt {
+    font-family: 'Determination';
+    color: white;
+    background-color: transparent;
+
+    border: none;
+    border-bottom: 1px dashed var(--selected-task-border-color);
+
+    box-sizing: border-box;
+    padding: 0.5em 0.2em 0.5em;
+
+    width: auto;
+}
+
+.task-text-inpt:focus {
+    outline: none;
 }
