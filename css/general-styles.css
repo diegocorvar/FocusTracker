@@ -20,6 +20,12 @@
     initial-value: rgb(22,22,22);
 }
 
+@property --element-size {
+    syntax: '<number>';
+    inherits: true;
+    initial-value: 0;
+}
+
 :root {
     --main-bg-color1: rgb(19,19,19);
     --transparent-white: rgba(175, 175, 175, 10%);
@@ -37,7 +43,7 @@ body {
     );
     min-height: 100vh;
 
-    transition: --main-bg-color2 0.5s ease ;
+    transition: --main-bg-color2 0.5s ease;
     overflow: hidden;
 }
 
@@ -185,6 +191,7 @@ TASKS
     box-sizing: border-box;
     width: 25%;
     height: 70%;
+    max-height: 500px;
 
     overflow-y: auto;
 
@@ -373,4 +380,16 @@ TASKS OPTIONS
 
 .task-text-inpt:focus {
     outline: none;
+}
+
+.disable-interaction {
+    pointer-events: none;
+    opacity: 0.1;
+}
+
+.hide-by-size {
+    --element-size: 0;
+
+    scale: var(--element-size);
+    transition: --element-size 0.3s ease;
 }

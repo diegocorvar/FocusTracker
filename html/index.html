@@ -77,8 +77,9 @@
                         <h2 class="title">Focusing on:</h2>
                         <p id="task-on-focus" class="task-text">Terminar este proyecto</p>
                     </div>
-                    <ul class="tasks-container">
+                    <ul class="tasks-container ">
                         <!-- SELECTED TASK -->
+                        
                         <li class="task selected">
                             <div>
                                 <input class="task-checkbox" type="checkbox">
@@ -90,8 +91,9 @@
                             >
                         </li>
                         <!-- TASK OPTIONS MENU -->
+                        <!--
                         <li class="task selected task-options">
-                            <input title="Click to edit" spellcheck="false" class="task-text-inpt" type="text" value="Terminar este proyecto">
+                            <input title="Click to edit" spellcheck="false" class="task-text-inpt" type="text" value="" placeholder="Insert task name">
                             <div>
                                 <img
                                     class="task-icon task-settings-btn delete-task-btn"  
@@ -99,12 +101,13 @@
                                     src="../assets/icons/delete_task_icon.png"
                                 >
                                 <img
-                                    class="task-icon task-settings-btn"
+                                    class="task-icon task-settings-btn save-task-btn"
                                     title="Save changes"
                                     src="../assets/icons/save_task_changes_icon.png"
                                 >
                             </div>
                         </li>
+                        -->
                         <!-- FINISHED TASK -->
                         <li class="task finished">
                             <div>
@@ -139,5 +142,6 @@
             <div class="window hide-window"></div>
         </main>
         <script src="../js/stopwatch-logic.js" defer></script>
+        <script src="../js/taskPanel-logic.js" defer></script>
     </body>
 </html>
