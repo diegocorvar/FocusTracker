@@ -14,17 +14,30 @@
     initial-value: 160px;
 }
 
+@property --main-bg-color2 {
+    syntax: '<color>';
+    inherits: true;
+    initial-value: rgb(22,22,22);
+}
+
 :root {
-    --main-bg-color: #191919;
+    --main-bg-color1: rgb(19,19,19);
     --transparent-white: rgba(175, 175, 175, 10%);
     --selected-task-bg-color: black;
     --selected-task-border-color: rgba(175, 175, 175, 50%);
     --finished-task-bg-color: rgb(19, 32, 19);
+    --time-digit-bg-color: #1e1e1e;
+    --time-digit-text-color: #d0d0d0;
 }
 
 body {
-    background-color: var(--main-bg-color);
+    background: linear-gradient(
+        var(--main-bg-color1),
+        var(--main-bg-color2)        
+    );
     min-height: 100vh;
+
+    transition: --main-bg-color2 0.5s ease ;
 }
 
 main {
@@ -57,7 +70,7 @@ STOPWATCH
 }
 
 .time-unit-text {
-    color: white;
+    color: var(--time-digit-text-color);
     font-family: 'Akzidenz-Grotesk BQ Condensed';
     font-weight: bold;
     font-size: var(--clock-size);
@@ -75,7 +88,7 @@ STOPWATCH
     padding: 0.2em;
     margin-left: 10px;
 
-    background-color: black;
+    background-color: var(--time-digit-bg-color);
 
     border-radius: 10px;
 
@@ -151,7 +164,7 @@ TASKS
 
     overflow-y: auto;
 
-    background-color: var(--main-bg-color);
+    background-color: var(--main-bg-color2);
 
     border-radius: 5%;
     border: 1px solid var(--transparent-white);
@@ -213,7 +226,7 @@ TASKS
 }
 
 .task-text {
-    color: rgb(245, 245, 245);
+    color: var(--time-digit-text-color);
     font-family: 'Determination';
     letter-spacing: 1px;
     user-select: none;

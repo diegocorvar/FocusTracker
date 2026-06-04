@@ -146,6 +146,7 @@ function switchToSmallClock() {
         navMenu
     ]);
     document.documentElement.style.setProperty('--clock-size', '10rem');
+    document.documentElement.style.setProperty('--main-bg-color2', '(22,22,22)');
 }
 
 function switchToBigClock() {
@@ -159,6 +160,7 @@ function switchToBigClock() {
         taskOnFocusContainer
     ]);
     document.documentElement.style.setProperty('--clock-size', '23rem');
+    document.documentElement.style.setProperty('--main-bg-color2', 'rgb(19,19,19)');
 }
 
 function hideElements(elements) {
