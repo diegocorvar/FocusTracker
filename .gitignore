@@ -38,3 +38,6 @@ Thumbs.db
 # Oculta carpetas de configuración interna de editores como VS Code
 .vscode/
 .idea/
+
+
+*.db
