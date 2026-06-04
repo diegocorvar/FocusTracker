@@ -114,6 +114,11 @@ STOPWATCH
     display: inline-block;
 }
 
+.clock-size-options {
+    position: absolute !important;
+    top: -70px;
+}
+
 /*===========================================
 ACTION BUTTONS
 ===========================================*/
@@ -154,6 +159,14 @@ ACTION BUTTONS
 
 .action-btn:active .btn-icon {
     transform: scale(0.8);
+}
+
+.discreet-btn {
+    filter: brightness(25%);
+}
+
+.discreet-btn:hover {
+    filter: brightness(100%);
 }
 
 /*===========================================

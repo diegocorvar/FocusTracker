@@ -13,6 +13,8 @@ BUTTONS
 const startStopBtn = document.getElementById("start-stop-btn");
 const restartTimeBtn = document.getElementById("restart-time-btn");
 const finishTrackBtn = document.getElementById("finish-track-btn");
+const enlargeClockBtn = document.getElementById("enlarge-clock-size-btn");
+const shrinkClockBtn = document.getElementById("shrink-clock-size-btn");
 
 
 /* =============================================================================
@@ -143,7 +145,8 @@ function toggleStopwatchUI() {
 
 function switchToSmallClock() {
     hideElements([
-        taskOnFocusContainer
+        taskOnFocusContainer,
+        clockSizeContainer
     ]);
     unhideElements([
         taskContainer,
@@ -163,9 +166,10 @@ function switchToBigClock() {
         navMenu
     ]);
     unhideElements([
-        taskOnFocusContainer
+        taskOnFocusContainer,
+        clockSizeContainer
     ]);
-    changeClockSize('23rem');
+    changeClockSize(`${currentClockSize}rem`);
     changeBackgroundColor('rgb(19,19,19)');
 }
 
@@ -188,3 +192,17 @@ function unhideElements(elements) {
         element.classList.remove("hide");
     }
 }
+
+/* =============================================================================
+CLOCK SIZE CONTROLLER
+============================================================================= */
+
+enlargeClockBtn.addEventListener("click", () => {
+    changeClockSize(`${currentClockSize + 1}rem`);
+    currentClockSize++;
+});
+
+shrinkClockBtn.addEventListener("click", () => {
+    changeClockSize(`${currentClockSize - 1}rem`);
+    currentClockSize--;
+});
