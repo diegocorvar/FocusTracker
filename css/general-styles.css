@@ -38,10 +38,15 @@ body {
     min-height: 100vh;
 
     transition: --main-bg-color2 0.5s ease ;
+    overflow: hidden;
 }
 
 main {
-    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
     overflow: hidden;
 }
 
@@ -49,6 +54,7 @@ main {
     display: flex;
     flex-direction: column;
     align-items: center;
+    position: relative;
 
     height: 100%;
     margin-top: 5%;
@@ -70,6 +76,7 @@ STOPWATCH
 }
 
 .time-unit-text {
+    position: relative;
     color: var(--time-digit-text-color);
     font-family: 'Akzidenz-Grotesk BQ Condensed';
     font-weight: bold;
@@ -80,23 +87,17 @@ STOPWATCH
     align-items: center;
 
     transition: --clock-size 0.5s ease;
-}
 
-.time-unit-digit {
-    position: relative;
-    font-size: inherit;
     user-select: none;
-    padding: 0.2em;
+    padding: 0 0.1em 0;
     margin-left: 10px;
 
     background-color: var(--time-digit-bg-color);
 
-    border-radius: 10px;
-
-    display: inline-block;
+    border-radius: 20px;
 }
 
-.time-unit-digit::after {
+.time-unit-text::after {
     position: absolute;
     top: 50%;
     left: 0;

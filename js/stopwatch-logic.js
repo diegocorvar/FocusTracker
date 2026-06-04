@@ -19,9 +19,9 @@ const finishTrackBtn = document.getElementById("finish-track-btn");
 SPANS
 ============================================================================= */
 
-const secSpans = document.querySelectorAll("#seconds-text .time-unit-digit");
-const minSpans = document.querySelectorAll("#minutes-text .time-unit-digit");
-const hrSpans = document.querySelectorAll("#hours-text .time-unit-digit");
+const secSpan = document.getElementById("seconds-text");
+const minSpan = document.getElementById("minutes-text");
+const hrSpan = document.getElementById("hours-text");
 
 /* =============================================================================
 CONTAINERS
@@ -30,17 +30,20 @@ CONTAINERS
 const taskContainer = document.getElementsByClassName("tasks-container")[0];
 const taskOnFocusContainer = document.getElementsByClassName("task-on-focus-container")[0];
 const navMenu = document.getElementById("nav-menu");
+const clockSizeContainer = document.getElementsByClassName("clock-size-options")[0];
 
 
 let totalMiliseconds = 0;
 let miliseconds = 0;
-let seconds = getTimeFromSpans(secSpans);
-let minutes = getTimeFromSpans(minSpans);
-let hours = getTimeFromSpans(hrSpans);
+let seconds = getTimeFromSpan(secSpan);
+let minutes = getTimeFromSpan(minSpan);
+let hours = getTimeFromSpan(hrSpan);
 let startTime = undefined;
 
-function getTimeFromSpans(spanList) {
-    return Number(Array.from(spanList).map(span => span.textContent).join(''));
+let currentClockSize = 35;
+
+function getTimeFromSpan(span) {
+    return Number(span.textContent);
 }
 
 /* =============================================================================
@@ -82,9 +85,9 @@ restartTimeBtn.addEventListener("click", () => {
 });
 
 function restartTimeSpans() {
-    updateStopwatchDigits(0, secSpans);
-    updateStopwatchDigits(0, minSpans);
-    updateStopwatchDigits(0, hrSpans);
+    updateStopwatchDigits(0, secSpan);
+    updateStopwatchDigits(0, minSpan);
+    updateStopwatchDigits(0, hrSpan);
 }
 
 function restartTimeCounters() {
@@ -108,9 +111,9 @@ function timer() {
         minutes = Math.floor((miliseconds % 3600000) / 60000);
         seconds = Math.floor((miliseconds % 60000) / 1000);
 
-        updateStopwatchDigits(seconds, secSpans);
-        updateStopwatchDigits(minutes, minSpans);
-        updateStopwatchDigits(hours, hrSpans);
+        updateStopwatchDigits(seconds, secSpan);
+        updateStopwatchDigits(minutes, minSpan);
+        updateStopwatchDigits(hours, hrSpan);
 
         setTimeout(timer, 10);
     }
@@ -118,11 +121,11 @@ function timer() {
 
 function updateStopwatchDigits(timeUnit, currentDigits) {
     const newDigits = getTimerDigits(timeUnit);
-    for (let i = 0; i < 2; i ++ ) currentDigits[i].textContent = newDigits[i];
+    currentDigits.textContent = newDigits;
 }
 
 function getTimerDigits(timeUnit) {
-    return String(timeUnit).padStart(2, '0').split('');
+    return String(timeUnit).padStart(2, '0');
 }
 
 /* =============================================================================
@@ -149,7 +152,7 @@ function switchToSmallClock() {
         navMenu
     ]);
     changeClockSize('10rem');
-    changeBackgroundColor('rgb(22,22,22)')
+    changeBackgroundColor('rgb(22,22,22)');
 }
 
 function switchToBigClock() {
