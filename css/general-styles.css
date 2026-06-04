@@ -26,7 +26,7 @@
     --selected-task-bg-color: black;
     --selected-task-border-color: rgba(175, 175, 175, 50%);
     --finished-task-bg-color: rgb(19, 32, 19);
-    --time-digit-bg-color: #1e1e1e;
+    --time-digit-bg-color: #161616;
     --time-digit-text-color: #d0d0d0;
 }
 
@@ -83,6 +83,7 @@ STOPWATCH
 }
 
 .time-unit-digit {
+    position: relative;
     font-size: inherit;
     user-select: none;
     padding: 0.2em;
@@ -93,6 +94,15 @@ STOPWATCH
     border-radius: 10px;
 
     display: inline-block;
+}
+
+.time-unit-digit::after {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    content: ' ';
+    width: 100%;
+    border-bottom: 3px solid var(--time-digit-bg-color);
 }
 
 .unit-separator {

@@ -130,9 +130,12 @@ UI CONTROLLER
 ============================================================================= */
 
 function toggleStopwatchUI() {
-    console.log('hola');
-    if (stopwatchRunning) switchToBigClock();
-    else switchToSmallClock();
+    if (stopwatchRunning){
+        switchToBigClock();
+    } 
+    else{
+        switchToSmallClock();
+    } 
 }
 
 function switchToSmallClock() {
@@ -145,8 +148,8 @@ function switchToSmallClock() {
         finishTrackBtn,
         navMenu
     ]);
-    document.documentElement.style.setProperty('--clock-size', '10rem');
-    document.documentElement.style.setProperty('--main-bg-color2', '(22,22,22)');
+    changeClockSize('10rem');
+    changeBackgroundColor('rgb(22,22,22)')
 }
 
 function switchToBigClock() {
@@ -159,8 +162,16 @@ function switchToBigClock() {
     unhideElements([
         taskOnFocusContainer
     ]);
-    document.documentElement.style.setProperty('--clock-size', '23rem');
-    document.documentElement.style.setProperty('--main-bg-color2', 'rgb(19,19,19)');
+    changeClockSize('23rem');
+    changeBackgroundColor('rgb(19,19,19)');
+}
+
+function changeClockSize(size){
+    document.documentElement.style.setProperty('--clock-size', size);
+}
+
+function changeBackgroundColor(color){
+    document.documentElement.style.setProperty('--main-bg-color2', color);
 }
 
 function hideElements(elements) {
