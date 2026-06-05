@@ -49,38 +49,33 @@ function openTaskOptions(referenceElement, taskName = '', taskId = '') {
     return openedOptions;
 }
 
-function focusOnTaskOptions(task) {
-    switchElementsAvailability(disableElements);
-    task.focus();
-}
-
-function disableElements(elementList) {
-    for (let element of elementList) {
-        element.classList.add("disable-interaction");
-    }
-}
-
-function enableSaveBtn(task, saveTaskFunction) {
+function enableSaveBtn(task, btnFunction) {
     const currentSaveBtn = task.querySelector(".save-task-btn");
-    const currentTaskInput = task.querySelector(".task-text-inpt");
+    const currentInput = task.querySelector(".task-text-inpt");
 
-    currentSaveBtn.addEventListener("click", () => {
-        if (currentTaskInput.value.trim() != ""){
-            saveTaskFunction(task);
-            exitTaskOptions(task, currentTaskInput.value);
+    currentSaveBtn.addEventListener("click", async () => {
+        const taskName = currentInput.value;
+        if (taskName.trim() != ""){
+            const taskId = await btnFunction(task);
+            exitTaskOptions(task, taskId, taskName);
         } 
         else{
-            showErrorOnElement(currentTaskInput);
+            showErrorOnElement(task.querySelector(".task-text-inpt"));
         }
     });
 }
 
-function exitTaskOptions(task, taskName, taskId) {
+function exitTaskOptions(task, taskId, taskName) {
     switchElementsAvailability(renableElements);
 
     task.style.setProperty("--element-size", 0);
     setTimeout(() => addTaskToPanel(task, taskId, taskName), 200);
     setTimeout(() => task.remove(), 250);
+}
+
+function focusOnTaskOptions(task) {
+    switchElementsAvailability(disableElements);
+    task.focus();
 }
 
 function switchElementsAvailability(switchFunction) {
@@ -93,6 +88,12 @@ function switchElementsAvailability(switchFunction) {
 function renableElements(elementList) {
     for (let element of elementList) {
         element.classList.remove("disable-interaction");
+    }
+}
+
+function disableElements(elementList) {
+    for (let element of elementList) {
+        element.classList.add("disable-interaction");
     }
 }
 
@@ -135,6 +136,10 @@ function enableSettingsBtn(task, taskName) {
     });
 }
 
+/* =============================================================================
+DATABASE QUERIES
+============================================================================= */
+
 async function renameTask(task) {
     const taskId = task.id
     const taskName = task.querySelector(".task-text-inpt").value;
@@ -142,10 +147,8 @@ async function renameTask(task) {
         name: taskName,
         id: parseInt(taskId, 10)
     }
-    if(await window.electronAPI.sendTaskToRename(data))
-        console.log("tarea actualizada correctamente");
-    else
-        console.log("error al actualizar tarea");
+    const updatedId = await window.electronAPI.sendTaskToRename(data);
+    return updatedId;
 }
 
 async function saveNewTask(task) {
@@ -153,4 +156,5 @@ async function saveNewTask(task) {
     const data = {name: taskName};
     const id = await window.electronAPI.sendTaskToInsert(data);
     console.log(`Tarea guardada en SQLite mediante Electron con el ID: ${id}`);
+    return id;
 }

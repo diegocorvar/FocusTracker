@@ -15,7 +15,7 @@ async function updateTaskName({ name, id }) {
     const query = `UPDATE tasks SET  name = ? WHERE id = ?`;
     const result = await db.run(query, [name, id]);
 
-    return result.changes > 0;
+    return result.changes > 0 ? id : null;
 }
 
 module.exports = { insertNewTask, updateTaskName };
