@@ -1,5 +1,5 @@
 const { app, BrowserWindow, ipcMain } = require("electron/main");
-const { saveTask } = require('./taskController.js');
+const { insertNewTask, updateTaskName } = require('./taskController.js');
 
 const path = require("node:path");
 
@@ -34,7 +34,12 @@ app.on("window-all-closed", () => {
     }
 });
 
-ipcMain.handle('save-task', async (event, taskData) => {
-    const generatedId = await saveTask(taskData);
+ipcMain.handle('insert-task', async (event, taskData) => {
+    const generatedId = await insertNewTask(taskData);
     return generatedId;
+});
+
+ipcMain.handle('rename-task', async (event, taskData) => {
+    const result = await updateTaskName(taskData);
+    return result;
 });

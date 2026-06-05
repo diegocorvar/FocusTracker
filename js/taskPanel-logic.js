@@ -75,9 +75,61 @@ function renableElements(elementList) {
     }
 }
 
+function showErrorOnElement(element) {
+    element.classList.add("error");
+    element.focus();
+    setTimeout(() => element.classList.remove("error"), 200);
+}
+
+/* =============================================================================
+ADD TASK TO PANEL
+============================================================================= */
+
+function addTaskToPanel(referenceElement, taskId, taskName) {
+    const task = `
+        <li id="${taskId}" class="task">
+            <div>
+                <input class="task-checkbox" type="checkbox">
+                <span class="task-text">${taskName}</span>
+            </div>
+            <img 
+                class="task-icon task-settings-btn" 
+                src="../assets/icons/task_options_icon.png"
+            >
+        </li>
+    `
+
+    referenceElement.insertAdjacentHTML("beforebegin", task);
+    enableSettingsBtn(referenceElement.previousElementSibling, taskName);
+}
+
+function enableSettingsBtn(task, taskName) {
+    const taskSettingsBtn = task.querySelector(".task-settings-btn");
+
+    taskSettingsBtn.addEventListener("click", () => {
+        const taskOptions = openTaskOptions(task, taskName, task.id);
+        taskOptions.style.setProperty("--element-size", 1);
+        enableSaveBtn(taskOptions, renameTask);
+        task.remove();
+    });
+}
+
+async function renameTask(task) {
+    const taskId = task.id
+    const taskName = task.querySelector(".task-text-inpt").value;
+    const data = {
+        name: taskName,
+        id: parseInt(taskId, 10)
+    }
+    if(await window.electronAPI.sendTaskToRename(data))
+        console.log("tarea actualizada correctamente");
+    else
+        console.log("error al actualizar tarea");
+}
+
 async function saveNewTask(task) {
-    const taskName = task.value;
+    const taskName = task.querySelector(".task-text-inpt").value;
     const data = {name: taskName};
-    const id = await window.electronAPI.sendTask(data);
+    const id = await window.electronAPI.sendTaskToInsert(data);
     console.log(`Tarea guardada en SQLite mediante Electron con el ID: ${id}`);
 }
