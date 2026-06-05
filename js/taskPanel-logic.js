@@ -5,15 +5,29 @@ ADD NEW TASK
 ============================================================================= */
 
 addNewTaskBtn.addEventListener("click", () => {
-    createNewTask();
-    focusOnTaskOptions();
-    document.querySelector(".hide-by-size").style.setProperty("--element-size", 1);
+    const taskOptions = prepareNewTask();
+    taskOptions.style.setProperty("--element-size", 1);
 });
 
-function createNewTask() {
-    const newTask = `
-        <li class="task selected task-options hide-by-size">
-            <input title="Click to edit" spellcheck="false" class="task-text-inpt" type="text" value="" placeholder="Insert task name">
+function prepareNewTask() {
+    const newPendingTask = openTaskOptions(addNewTaskBtn);
+    downPanelScroll();
+    enableSaveBtn(newPendingTask, saveNewTask);
+    return newPendingTask;
+}
+
+function downPanelScroll() {
+    taskContainer.scrollTop = taskContainer.scrollHeight;
+}
+
+/* =============================================================================
+OPEN TASK OPTIONS
+============================================================================= */
+
+function openTaskOptions(referenceElement, taskName = '', taskId = '') {
+    const taskOptions = `
+        <li id ="${taskId}" class="task selected task-options hide-by-size">
+            <input required title="Click to edit" spellcheck="false" class="task-text-inpt" type="text" value="${taskName}" placeholder="Insert task name">
             <div>
                 <img
                     class="task-icon task-settings-btn delete-task-btn"  
@@ -29,44 +43,51 @@ function createNewTask() {
         </li>
     `
 
-    addNewTaskBtn.insertAdjacentHTML("beforebegin", newTask);
-
-    const taskAdded = addNewTaskBtn.previousElementSibling;
-    const taskInput = taskAdded.querySelector(".task-text-inpt");
-
-    const currentSaveBtn = taskAdded.querySelector(".save-task-btn");
-    const currentDeleteBtn = taskAdded.querySelector(".delete-task-btn");
-
-    currentSaveBtn.addEventListener("click", () => {
-        if (taskInput.value.trim() != ""){
-            saveNewTask(taskInput);
-            exitTaskOptions();
-        } 
-        else{
-            taskInput.focus();
-        }
-    });
+    referenceElement.insertAdjacentHTML("beforebegin", taskOptions);
+    const openedOptions = referenceElement.previousElementSibling;
+    focusOnTaskOptions(openedOptions.querySelector(".task-text-inpt"));
+    return openedOptions;
 }
 
-function focusOnTaskOptions() {
-    disableElements(document.querySelectorAll(".task:not(.task-options)"));
-    disableElements(document.querySelectorAll(".action-btn"));
-    disableElements(document.querySelectorAll(".nav-options-container"));
-    disableElements(document.querySelectorAll(".clock-container"));
-    document.getElementsByClassName("task-text-inpt")[0].focus();
-}
-
-function exitTaskOptions() {
-    renableElements(document.querySelectorAll(".task:not(.task-options)"));
-    renableElements(document.querySelectorAll(".action-btn"));
-    renableElements(document.querySelectorAll(".nav-options-container"));
-    renableElements(document.querySelectorAll(".clock-container"));
+function focusOnTaskOptions(task) {
+    switchElementsAvailability(disableElements);
+    task.focus();
 }
 
 function disableElements(elementList) {
     for (let element of elementList) {
         element.classList.add("disable-interaction");
     }
+}
+
+function enableSaveBtn(task, saveTaskFunction) {
+    const currentSaveBtn = task.querySelector(".save-task-btn");
+    const currentTaskInput = task.querySelector(".task-text-inpt");
+
+    currentSaveBtn.addEventListener("click", () => {
+        if (currentTaskInput.value.trim() != ""){
+            saveTaskFunction(task);
+            exitTaskOptions(task, currentTaskInput.value);
+        } 
+        else{
+            showErrorOnElement(currentTaskInput);
+        }
+    });
+}
+
+function exitTaskOptions(task, taskName, taskId) {
+    switchElementsAvailability(renableElements);
+
+    task.style.setProperty("--element-size", 0);
+    setTimeout(() => addTaskToPanel(task, taskId, taskName), 200);
+    setTimeout(() => task.remove(), 250);
+}
+
+function switchElementsAvailability(switchFunction) {
+    switchFunction(document.querySelectorAll(".task:not(.task-options)"));
+    switchFunction(document.querySelectorAll(".action-btn"));
+    switchFunction(document.querySelectorAll(".nav-options-container"));
+    switchFunction(document.querySelectorAll(".clock-container"));
 }
 
 function renableElements(elementList) {

@@ -70,6 +70,10 @@ main {
     display: none !important;
 }
 
+.error {
+    filter: invert(20%) sepia(51%) saturate(5369%) hue-rotate(352deg) brightness(81%) contrast(91%);
+}
+
 /*===========================================
 STOPWATCH
 ===========================================*/
@@ -391,5 +395,5 @@ TASKS OPTIONS
     --element-size: 0;
 
     scale: var(--element-size);
-    transition: --element-size 0.3s ease;
+    transition: --element-size 0.2s ease;
 }
