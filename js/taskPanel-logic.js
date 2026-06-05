@@ -1,7 +1,5 @@
 const addNewTaskBtn = document.getElementById("add-new-task");
 
-const modalOverlay = document.getElementsByClassName("modal-overlay")[0];
-
 /* =============================================================================
 ADD NEW TASK
 ============================================================================= */
@@ -23,7 +21,7 @@ function createNewTask() {
                     src="../assets/icons/delete_task_icon.png"
                 >
                 <img
-                    class="task-icon task-settings-btn"
+                    class="task-icon task-settings-btn save-task-btn"
                     title="Save changes"
                     src="../assets/icons/save_task_changes_icon.png"
                 >
@@ -32,23 +30,54 @@ function createNewTask() {
     `
 
     addNewTaskBtn.insertAdjacentHTML("beforebegin", newTask);
+
+    const taskAdded = addNewTaskBtn.previousElementSibling;
+    const taskInput = taskAdded.querySelector(".task-text-inpt");
+
+    const currentSaveBtn = taskAdded.querySelector(".save-task-btn");
+    const currentDeleteBtn = taskAdded.querySelector(".delete-task-btn");
+
+    currentSaveBtn.addEventListener("click", () => {
+        if (taskInput.value.trim() != ""){
+            saveNewTask(taskInput);
+            exitTaskOptions();
+        } 
+        else{
+            taskInput.focus();
+        }
+    });
 }
 
 function focusOnTaskOptions() {
-    const taskOptions = document.getElementsByClassName("task-text-inpt")[0];
     disableElements(document.querySelectorAll(".task:not(.task-options)"));
     disableElements(document.querySelectorAll(".action-btn"));
     disableElements(document.querySelectorAll(".nav-options-container"));
     disableElements(document.querySelectorAll(".clock-container"));
-    taskOptions.focus();
+    document.getElementsByClassName("task-text-inpt")[0].focus();
+}
+
+function exitTaskOptions() {
+    renableElements(document.querySelectorAll(".task:not(.task-options)"));
+    renableElements(document.querySelectorAll(".action-btn"));
+    renableElements(document.querySelectorAll(".nav-options-container"));
+    renableElements(document.querySelectorAll(".clock-container"));
 }
 
 function disableElements(elementList) {
-    for (element of elementList) {
+    for (let element of elementList) {
         element.classList.add("disable-interaction");
     }
 }
 
-/* =============================================================================
-CONTAINERS
-============================================================================= */
+function renableElements(elementList) {
+    for (let element of elementList) {
+        element.classList.remove("disable-interaction");
+    }
+}
+
+async function saveNewTask(task) {
+    const taskName = task.value;
+    const data = {name: taskName};
+    const id = await window.electronAPI.sendTask(data);
+    console.log(`Tarea guardada en SQLite mediante Electron con el ID: ${id}`);
+}

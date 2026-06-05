@@ -1,13 +1,14 @@
-import sqlite3 from 'sqlite3';
-import {open} from 'sqlite';
+const sqlite3 = require('sqlite3');
+const { open } = require('sqlite');
+const path = require('path');
 
 let db = null;
 
-export async function initializeDatabase() {
+async function initializeDatabase() {
     if (db) return db;
 
     db = await open({
-        filename: '../db/data.db',
+        filename: path.join(__dirname, '../db/data.db'),
         driver: sqlite3.Database
     });
 
@@ -29,3 +30,5 @@ async function createTables() {
         );
     `);
 }
+
+module.exports = {initializeDatabase};

@@ -1,4 +1,5 @@
-const { app, BrowserWindow } = require("electron/main");
+const { app, BrowserWindow, ipcMain } = require("electron/main");
+const { saveTask } = require('./taskController.js');
 
 const path = require("node:path");
 
@@ -31,4 +32,9 @@ app.on("window-all-closed", () => {
     if (process.platform !== "darwin") {
         app.quit();
     }
+});
+
+ipcMain.handle('save-task', async (event, taskData) => {
+    const generatedId = await saveTask(taskData);
+    return generatedId;
 });
