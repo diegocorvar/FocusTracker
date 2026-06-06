@@ -44,12 +44,23 @@ function openTaskOptions(referenceElement, taskName = '', taskId = '') {
     const taskOptions = `
         <li id ="${taskId}" class="task selected task-options hide-by-size">
             <input required title="Click to edit" spellcheck="false" class="task-text-inpt" type="text" value="${taskName}" placeholder="Insert task name">
-            <div>
-                <img
-                    class="task-icon task-settings-btn delete-task-btn"  
-                    title="Delete task" 
-                    src="../assets/icons/delete_task_icon.png"
-                >
+            <div class="task-options-container">
+                <div class="delete-task-btn-container">
+                    <div class="popup-message hide-by-size">
+                        <div class="warning-message-container">
+                            <span class="warning-message-text">Are you sure?</span>
+                            <div>
+                                <button class="decision-btn afirmative-btn">YEP</button>
+                                <button class="decision-btn negative-btn">NOP</button>
+                            </div>
+                        </div>
+                    </div>
+                    <img
+                        class="task-icon task-settings-btn delete-task-btn"  
+                        title="Delete task" 
+                        src="../assets/icons/delete_task_icon.png"
+                    >
+                </div>
                 <img
                     class="task-icon task-settings-btn save-task-btn"
                     title="Save changes"
@@ -89,6 +100,18 @@ function enableDeleteBtn(task) {
     const deleteBtn = task.querySelector(".delete-task-btn");
 
     deleteBtn.addEventListener("click", async () => {
+        const warningMessage = task.querySelector(".popup-message");
+        warningMessage.style.setProperty("--element-size", 1);
+        enableDeleteConfirmMessage(task);
+    });
+}
+
+function enableDeleteConfirmMessage(task) {
+    const warningMessage = task.querySelector(".popup-message");
+    const confirmDeleteBtn = task.querySelector(".afirmative-btn");
+    const cancelDeleteBtn = task.querySelector(".negative-btn");
+
+    confirmDeleteBtn.addEventListener("click", async () => {
         if(task.id) 
             if(await !deleteTask(task)) {
                 console.log("error deleting the task");
@@ -96,6 +119,9 @@ function enableDeleteBtn(task) {
             }
         exitTaskOptions(task);
     });
+    cancelDeleteBtn.addEventListener("click", () => {
+        warningMessage.style.setProperty("--element-size", 0);
+    })
 }
 
 function exitTaskOptions(task, taskId = null, taskName = null) {

@@ -38,9 +38,9 @@ const clockSizeContainer = document.getElementsByClassName("clock-size-options")
 
 let totalMiliseconds = 0;
 let miliseconds = 0;
-let seconds = getTimeFromSpan(secSpan);
-let minutes = getTimeFromSpan(minSpan);
-let hours = getTimeFromSpan(hrSpan);
+let seconds = 0;
+let minutes = 0;
+let hours = 0;
 let startTime = undefined;
 
 let currentClockSize = 35;
@@ -57,7 +57,8 @@ startStopBtn.addEventListener("click", () => {
     stopwatchRunning ? stopStopwatch() : startStopwatch();
     timer();
     toggleStopwatchUI();
-    taskOnFocusP.textContent = currentSelectedTask.querySelector(".task-text").textContent;
+    if (currentSelectedTask)
+        taskOnFocusP.textContent = currentSelectedTask.querySelector(".task-text").textContent;
 });
 
 const PLAY_ICON = 'play_icon.png';

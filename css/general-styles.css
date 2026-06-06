@@ -74,6 +74,18 @@ main {
     filter: invert(20%) sepia(51%) saturate(5369%) hue-rotate(352deg) brightness(81%) contrast(91%);
 }
 
+.disable-interaction {
+    pointer-events: none;
+    opacity: 0.1;
+}
+
+.hide-by-size {
+    --element-size: 0;
+
+    scale: var(--element-size);
+    transition: --element-size 0.2s ease;
+}
+
 /*===========================================
 STOPWATCH
 ===========================================*/
@@ -346,6 +358,11 @@ TASKS OPTIONS
     padding: 3em 1em 3em;
 }
 
+.task-options-container {
+    display: flex;
+    flex-direction: row;
+}
+
 .task-settings-btn {
     cursor: pointer;
     filter: invert() brightness(20%);
@@ -387,14 +404,71 @@ TASKS OPTIONS
     outline: none;
 }
 
-.disable-interaction {
-    pointer-events: none;
-    opacity: 0.1;
+.delete-task-btn-container {
+    display: flex;
+    flex-direction: column;
 }
 
-.hide-by-size {
-    --element-size: 0;
-
-    scale: var(--element-size);
-    transition: --element-size 0.2s ease;
+.delete-task-btn-container {
+    position: relative;
 }
+
+.popup-message  {
+    position: absolute;
+    top: -27px;
+    right: -30px;
+
+    min-width: 100px;
+    
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    background-color: rgb(51, 22, 22);
+
+    box-sizing: border-box;
+    padding: 0.3em;
+    border: 1px solid white;
+    border-radius: 5px;
+    z-index: 9999;
+}
+
+.warning-message-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.warning-message-text {
+    font-family: 'Determination';
+    color: var(--time-digit-text-color);
+    text-align: center;
+}
+
+.decision-btn { 
+    cursor: pointer;
+    background-color: transparent;
+    color: white;
+
+    border: 1px solid var(--selected-task-border-color);
+    border-radius: 5px;
+
+    font-family: 'Determination';
+    font-weight: bold;
+
+    padding: 0.1em 0.2em;
+    filter: opacity(50%);
+}
+
+.decision-btn:hover {
+    filter: opacity(100%);
+}
+
+.afirmative-btn {
+    background-color: green;
+}
+
+.negative-btn {
+    background-color: rgb(155, 32, 16);
+}
+
+
