@@ -84,6 +84,28 @@ async function increaseFocusTime({ id, focusTimeInSec}) {
     return result.changes > 0;
 }
 
+async function updateCurrentFocusTime({ hours, minutes, seconds }) {
+    const db = await initializeDatabase();
+
+    const query = `
+        UPDATE currentFocusSesion
+        SET hours = ?, minutes = ?, seconds = ?
+        WHERE id = 1
+    `;
+    const result = await db.run(query, [hours, minutes, seconds]);
+
+    return result.changes > 0;
+}
+
+async function getCurrentFocusTime() {
+    const db = await initializeDatabase();
+
+    const query = `SELECT * FROM currentFocusSesion WHERE id = 1`;
+    const row = await db.get(query);
+
+    return row ? row : null;
+}
+
 module.exports = {
     insertNewTask,
     updateTaskName,
@@ -92,5 +114,7 @@ module.exports = {
     markTaskAsIncomplete,
     getIncompleteTasksIds,
     getTaskName,
-    increaseFocusTime
+    increaseFocusTime,
+    updateCurrentFocusTime,
+    getCurrentFocusTime
 };

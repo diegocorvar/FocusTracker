@@ -4,7 +4,8 @@ let stopwatchRunning = false;
 AUDIOS
 ============================================================================= */
 
-let click_sound = new Audio('../assets/audio/click.mp3');
+let click_sound_1 = new Audio('../assets/audio/click-sound-1.mp3');
+let click_sound_2 = new Audio('../assets/audio/click-sound-2.mp3');
 
 /* =============================================================================
 BUTTONS
@@ -15,7 +16,6 @@ const restartTimeBtn = document.getElementById("restart-time-btn");
 const finishTrackBtn = document.getElementById("finish-track-btn");
 const enlargeClockBtn = document.getElementById("enlarge-clock-size-btn");
 const shrinkClockBtn = document.getElementById("shrink-clock-size-btn");
-
 
 /* =============================================================================
 SPANS
@@ -45,8 +45,22 @@ let startTime = undefined;
 
 let currentClockSize = 35;
 
-function getTimeFromSpan(span) {
-    return Number(span.textContent);
+loadLastSesionTime();
+
+async function loadLastSesionTime() {
+    const sesionTime = await getCurrentSesionFocusTime();
+
+    hours = sesionTime.hours;
+    minutes = sesionTime.minutes;
+    seconds = sesionTime.seconds;
+
+    updateStopwatch();
+
+    totalMiliseconds = calculateMiliseconds(seconds, minutes, hours);
+} 
+
+function calculateMiliseconds(secs = 0, mins = 0, hrs = 0) {
+    return (secs * 1000) + (mins * 60000) + (hrs * 3600000);
 }
 
 /* =============================================================================
@@ -54,6 +68,7 @@ START STOP BUTTON
 ============================================================================= */
 
 startStopBtn.addEventListener("click", () => {
+    click_sound_1.play();
     stopwatchRunning ? stopStopwatch() : startStopwatch();
     timer();
     toggleStopwatchUI();
@@ -75,6 +90,7 @@ async function stopStopwatch() {
     stopwatchRunning = false;
     if(currentSelectedTask) await increaseTaskFocusTime(currentSelectedTask);
     totalMiliseconds += Date.now() - startTime;
+    updateCurrentSesionFocusTime(hours, minutes, seconds);
 }
 
 function changeBtnIcon(button, icon) {
@@ -86,8 +102,10 @@ RESTART BUTTON
 ============================================================================= */
 
 restartTimeBtn.addEventListener("click", () => {
+    click_sound_1.play();
     restartTimeCounters();
     restartTimeSpans();
+    updateCurrentSesionFocusTime(0, 0, 0);
 });
 
 function restartTimeSpans() {
@@ -117,12 +135,16 @@ function timer() {
         minutes = Math.floor((miliseconds % 3600000) / 60000);
         seconds = Math.floor((miliseconds % 60000) / 1000);
 
-        updateStopwatchDigits(seconds, secSpan);
-        updateStopwatchDigits(minutes, minSpan);
-        updateStopwatchDigits(hours, hrSpan);
+        updateStopwatch();
 
         setTimeout(timer, 10);
     }
+}
+
+function updateStopwatch() {
+    updateStopwatchDigits(seconds, secSpan);
+    updateStopwatchDigits(minutes, minSpan);
+    updateStopwatchDigits(hours, hrSpan);
 }
 
 function updateStopwatchDigits(timeUnit, currentDigits) {
@@ -225,4 +247,21 @@ async function increaseTaskFocusTime(task) {
     const result = await window.electronAPI.sendTaskToIncreseFocusTime(data);
     if (!result) console.log("increaseTaskFocusTime failed");
     return result;
+}
+
+async function updateCurrentSesionFocusTime(hours, minutes, seconds) {
+    const data = {
+        hours: hours,
+        minutes: minutes,
+        seconds: seconds
+    }
+    const result = await window.electronAPI.sendTimeToUpdateFocusTime(data);
+    if (!result) console.log("updateCurrentSesionFocusTime failed");
+    return result;
+}
+
+async function getCurrentSesionFocusTime() {
+    const time = await window.electronAPI.requestCurrentFocusTime();
+    if (!time) console.log("getCurrentSesionFocusTime failed");
+    return time;
 }

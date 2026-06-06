@@ -29,6 +29,21 @@ async function createTables() {
             focusTimeInSec INTEGER DEFAULT 0
         );
     `);
+
+    await db.exec(`
+        CREATE TABLE IF NOT EXISTS currentFocusSesion (
+            id INTEGER PRIMARY KEY,
+            hours INTEGER DEFAULT 0 NOT NULL,
+            minutes INTEGER DEFAULT 0 NOT NULL,
+            seconds INTEGER DEFAULT 0 NOT NULL
+        ); 
+    `);
+
+    await db.run(`
+        INSERT INTO currentFocusSesion (id)
+        VALUES (1) 
+        ON CONFLICT(id) DO NOTHING;
+    `)
 }
 
 module.exports = {initializeDatabase};

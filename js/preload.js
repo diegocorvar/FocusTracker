@@ -8,5 +8,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
     sendTaskToIncomplete: (data) => ipcRenderer.invoke('incomplete-task', data),
     requestIncompleteTasksIds: () => ipcRenderer.invoke('get-incomplete-tasks-ids'),
     requestTaskName: (data) => ipcRenderer.invoke('get-task-name', data),
-    sendTaskToIncreseFocusTime: (data) => ipcRenderer.invoke('increase-task-focus-time', data)
+    sendTaskToIncreseFocusTime: (data) => ipcRenderer.invoke('increase-task-focus-time', data),
+    sendTimeToUpdateFocusTime: (data) => ipcRenderer.invoke('update-current-focus-time', data),
+    requestCurrentFocusTime: () => ipcRenderer.invoke('get-current-focus-time')
 })

@@ -10,6 +10,7 @@ ADD NEW TASK
 ============================================================================= */
 
 addNewTaskBtn.addEventListener("click", () => {
+    click_sound_2.play();
     const taskOptions = prepareNewTask();
     taskOptions.style.setProperty("--element-size", 1);
 });
@@ -218,11 +219,11 @@ function enableCheckBoxTask(task) {
 
     checkBoxTask.addEventListener("click", async () => {
         if (!checkBoxTask.checked) {
-            setTaskAsIncomplete(task);
+            await setTaskAsIncomplete(task);
             task.classList.remove("finished");
         }
         else {
-            setTaskAsComplete(task);
+            await setTaskAsComplete(task);
             task.classList.add("finished");
         }
         if(currentSelectedTask === task) {
