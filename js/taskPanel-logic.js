@@ -204,6 +204,7 @@ function enableCheckBoxTask(task) {
         if(currentSelectedTask === task) {
             currentSelectedTask.classList.remove("selected");
             currentSelectedTask = null;
+            taskOnFocusP.textContent = "Something";
         }
     });
 }
