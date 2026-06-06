@@ -1,5 +1,7 @@
 const addNewTaskBtn = document.getElementById("add-new-task");
 
+let  currentSelectedTask = null;
+
 /* =============================================================================
 ADD NEW TASK
 ============================================================================= */
@@ -13,6 +15,7 @@ function prepareNewTask() {
     const newPendingTask = openTaskOptions(addNewTaskBtn);
     downPanelScroll();
     enableSaveBtn(newPendingTask, saveNewTask);
+    enableDeleteBtn(newPendingTask);
     return newPendingTask;
 }
 
@@ -49,14 +52,16 @@ function openTaskOptions(referenceElement, taskName = '', taskId = '') {
     return openedOptions;
 }
 
-function enableSaveBtn(task, btnFunction) {
-    const currentSaveBtn = task.querySelector(".save-task-btn");
-    const currentInput = task.querySelector(".task-text-inpt");
+/* ====== SAVE BUTTON ====== */
 
-    currentSaveBtn.addEventListener("click", async () => {
-        const taskName = currentInput.value;
+function enableSaveBtn(task, btnBehavior) {
+    const saveBtn = task.querySelector(".save-task-btn");
+    const taskInput = task.querySelector(".task-text-inpt");
+
+    saveBtn.addEventListener("click", async () => {
+        const taskName = taskInput.value;
         if (taskName.trim() != ""){
-            const taskId = await btnFunction(task);
+            const taskId = await btnBehavior(task);
             exitTaskOptions(task, taskId, taskName);
         } 
         else{
@@ -65,11 +70,26 @@ function enableSaveBtn(task, btnFunction) {
     });
 }
 
-function exitTaskOptions(task, taskId, taskName) {
+/* ====== DELETE BUTTON ====== */
+
+function enableDeleteBtn(task) {
+    const deleteBtn = task.querySelector(".delete-task-btn");
+
+    deleteBtn.addEventListener("click", async () => {
+        if(task.id) 
+            if(await !deleteTask(task)) {
+                console.log("error deleting the task");
+                return
+            }
+        exitTaskOptions(task);
+    });
+}
+
+function exitTaskOptions(task, taskId = null, taskName = null) {
     switchElementsAvailability(renableElements);
 
     task.style.setProperty("--element-size", 0);
-    setTimeout(() => addTaskToPanel(task, taskId, taskName), 200);
+    if (taskId !== null) setTimeout(() => addTaskToPanel(task, taskId, taskName), 200);
     setTimeout(() => task.remove(), 250);
 }
 
@@ -122,7 +142,9 @@ function addTaskToPanel(referenceElement, taskId, taskName) {
     `
 
     referenceElement.insertAdjacentHTML("beforebegin", task);
-    enableSettingsBtn(referenceElement.previousElementSibling, taskName);
+    const taskAdded = referenceElement.previousElementSibling;
+    enableSettingsBtn(taskAdded, taskName);
+    enableToSelectTask(taskAdded);
 }
 
 function enableSettingsBtn(task, taskName) {
@@ -132,7 +154,16 @@ function enableSettingsBtn(task, taskName) {
         const taskOptions = openTaskOptions(task, taskName, task.id);
         taskOptions.style.setProperty("--element-size", 1);
         enableSaveBtn(taskOptions, renameTask);
+        enableDeleteBtn(taskOptions);
         task.remove();
+    });
+}
+
+function enableToSelectTask(task) {
+    task.addEventListener("click", () => {
+        task.classList.add("selected");
+        if (currentSelectedTask) currentSelectedTask.classList.remove("selected");
+        currentSelectedTask = task; 
     });
 }
 
@@ -147,14 +178,20 @@ async function renameTask(task) {
         name: taskName,
         id: parseInt(taskId, 10)
     }
-    const updatedId = await window.electronAPI.sendTaskToRename(data);
-    return updatedId;
+    const updatedTaskId = await window.electronAPI.sendTaskToRename(data);
+    return updatedTaskId;
 }
 
 async function saveNewTask(task) {
     const taskName = task.querySelector(".task-text-inpt").value;
     const data = {name: taskName};
     const id = await window.electronAPI.sendTaskToInsert(data);
-    console.log(`Tarea guardada en SQLite mediante Electron con el ID: ${id}`);
     return id;
+}
+
+async function deleteTask(task) {
+    const taskId = parseInt(task.id, 10);
+    const data = {id: taskId};
+    const result = await window.electronAPI.sendTaskToDelete(data);
+    return result;
 }

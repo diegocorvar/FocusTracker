@@ -1,5 +1,5 @@
 const { app, BrowserWindow, ipcMain } = require("electron/main");
-const { insertNewTask, updateTaskName } = require('./taskController.js');
+const { insertNewTask, updateTaskName, deleteTask } = require('./taskController.js');
 
 const path = require("node:path");
 
@@ -41,5 +41,10 @@ ipcMain.handle('insert-task', async (event, taskData) => {
 
 ipcMain.handle('rename-task', async (event, taskData) => {
     const result = await updateTaskName(taskData);
+    return result;
+});
+
+ipcMain.handle('delete-task', async (event, taskData) => {
+    const result = await deleteTask(taskData);
     return result;
 });

@@ -18,4 +18,13 @@ async function updateTaskName({ name, id }) {
     return result.changes > 0 ? id : null;
 }
 
-module.exports = { insertNewTask, updateTaskName };
+async function deleteTask({ id }) {
+    const db = await initializeDatabase();
+
+    const query = `DELETE FROM tasks WHERE id = ?`;
+    const result = await db.run(query, [id]);
+
+    return result.changes > 0;
+}
+
+module.exports = { insertNewTask, updateTaskName, deleteTask };
