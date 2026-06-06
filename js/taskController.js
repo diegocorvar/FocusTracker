@@ -27,4 +27,28 @@ async function deleteTask({ id }) {
     return result.changes > 0;
 }
 
-module.exports = { insertNewTask, updateTaskName, deleteTask };
+async function completeTask({ id }) {
+    const db = await initializeDatabase();
+
+    const query = `UPDATE tasks SET  completed = 1 WHERE id = ?`;
+    const result = await db.run(query, [id]);
+
+    return result.changes > 0;
+}
+
+async function incompleteTask({ id }) {
+    const db = await initializeDatabase();
+
+    const query = `UPDATE tasks SET  completed = 0 WHERE id = ?`;
+    const result = await db.run(query, [id]);
+
+    return result.changes > 0;
+}
+
+module.exports = {
+    insertNewTask,
+    updateTaskName,
+    deleteTask,
+    completeTask,
+    incompleteTask
+};

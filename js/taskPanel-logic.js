@@ -145,6 +145,7 @@ function addTaskToPanel(referenceElement, taskId, taskName) {
     const taskAdded = referenceElement.previousElementSibling;
     enableSettingsBtn(taskAdded, taskName);
     enableToSelectTask(taskAdded);
+    enableCheckBoxTask(taskAdded);
 }
 
 function enableSettingsBtn(task, taskName) {
@@ -160,10 +161,37 @@ function enableSettingsBtn(task, taskName) {
 }
 
 function enableToSelectTask(task) {
+    
+
     task.addEventListener("click", () => {
+        const checkBoxTask = task.querySelector(".task-checkbox");
+
+        if (checkBoxTask.checked) return;
+
+        if (currentSelectedTask) {
+            currentSelectedTask.classList.remove("selected");
+        } 
         task.classList.add("selected");
-        if (currentSelectedTask) currentSelectedTask.classList.remove("selected");
         currentSelectedTask = task; 
+    });
+}
+
+function enableCheckBoxTask(task) {
+    const checkBoxTask = task.querySelector(".task-checkbox");
+
+    checkBoxTask.addEventListener("click", async () => {
+        if (!checkBoxTask.checked) {
+            setTaskAsIncomplete(task);
+            task.classList.remove("finished");
+        }
+        else {
+            setTaskAsComplete(task);
+            task.classList.add("finished");
+        }
+        if(currentSelectedTask === task) {
+            currentSelectedTask.classList.remove("selected");
+            currentSelectedTask = null;
+        }
     });
 }
 
@@ -193,5 +221,21 @@ async function deleteTask(task) {
     const taskId = parseInt(task.id, 10);
     const data = {id: taskId};
     const result = await window.electronAPI.sendTaskToDelete(data);
+    return result;
+}
+
+async function setTaskAsComplete(task) {
+    const taskId = parseInt(task.id, 10);
+    const data = {id: taskId};
+    const result = await window.electronAPI.sendTaskToComplete(data);
+    if (!result) console.log("setTaskAsComplete failed");
+    return result;
+}
+
+async function setTaskAsIncomplete(task) {
+    const taskId = parseInt(task.id, 10);
+    const data = {id: taskId};
+    const result = await window.electronAPI.sendTaskToIncomplete(data);
+    if (!result) console.log("setTaskAsIncomplete failed");
     return result;
 }

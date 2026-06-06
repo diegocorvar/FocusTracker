@@ -1,5 +1,11 @@
 const { app, BrowserWindow, ipcMain } = require("electron/main");
-const { insertNewTask, updateTaskName, deleteTask } = require('./taskController.js');
+const {
+    insertNewTask,
+    updateTaskName,
+    deleteTask,
+    completeTask,
+    incompleteTask
+} = require('./taskController.js');
 
 const path = require("node:path");
 
@@ -46,5 +52,15 @@ ipcMain.handle('rename-task', async (event, taskData) => {
 
 ipcMain.handle('delete-task', async (event, taskData) => {
     const result = await deleteTask(taskData);
+    return result;
+});
+
+ipcMain.handle('complete-task', async (event, taskData) => {
+    const result = await completeTask(taskData);
+    return result;
+});
+
+ipcMain.handle('incomplete-task', async (event, taskData) => {
+    const result = await incompleteTask(taskData);
     return result;
 });
