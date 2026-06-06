@@ -174,8 +174,6 @@ function enableSettingsBtn(task, taskName) {
 }
 
 function enableToSelectTask(task) {
-    
-
     task.addEventListener("click", () => {
         const checkBoxTask = task.querySelector(".task-checkbox");
 

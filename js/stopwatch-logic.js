@@ -69,9 +69,10 @@ function startStopwatch() {
     startTime = Date.now();
 }
 
-function stopStopwatch() {
+async function stopStopwatch() {
     changeBtnIcon(startStopBtn, PLAY_ICON);
     stopwatchRunning = false;
+    if(currentSelectedTask) await increaseTaskFocusTime(currentSelectedTask);
     totalMiliseconds += Date.now() - startTime;
 }
 
@@ -208,3 +209,19 @@ shrinkClockBtn.addEventListener("click", () => {
     changeClockSize(`${currentClockSize - 1}rem`);
     currentClockSize--;
 });
+
+/* =============================================================================
+DATABASE QUERIES
+============================================================================= */
+
+async function increaseTaskFocusTime(task) {
+    const taskId = task.id;
+    const focusTime = (Date.now() - startTime) / 1000;
+    const data = {
+        id: parseInt(taskId, 10),
+        focusTimeInSec: focusTime
+    }
+    const result = await window.electronAPI.sendTaskToIncreseFocusTime(data);
+    if (!result) console.log("increaseTaskFocusTime failed");
+    return result;
+}

@@ -30,7 +30,11 @@ async function deleteTask({ id }) {
 async function completeTask({ id }) {
     const db = await initializeDatabase();
 
-    const query = `UPDATE tasks SET  completed = 1 WHERE id = ?`;
+    const query = `
+        UPDATE tasks
+        SET completed = 1, completionDate = date('now', 'localtime')
+        WHERE id = ?
+    `;
     const result = await db.run(query, [id]);
 
     return result.changes > 0;
@@ -39,7 +43,11 @@ async function completeTask({ id }) {
 async function markTaskAsIncomplete({ id }) {
     const db = await initializeDatabase();
 
-    const query = `UPDATE tasks SET  completed = 0 WHERE id = ?`;
+    const query = `
+        UPDATE tasks
+        SET  completed = 0, completionDate = NULL
+        WHERE id = ?
+    `;
     const result = await db.run(query, [id]);
 
     return result.changes > 0;
@@ -63,6 +71,19 @@ async function getTaskName({ id }) {
     return row ? row.name : null;
 }
 
+async function increaseFocusTime({ id, focusTimeInSec}) {
+    const db = await initializeDatabase();
+
+    const query = `
+        UPDATE tasks
+        SET focusTimeInSec = focusTimeInSec + ?
+        WHERE id = ?
+    `;
+    const result = await db.run(query, [focusTimeInSec, id]);
+
+    return result.changes > 0;
+}
+
 module.exports = {
     insertNewTask,
     updateTaskName,
@@ -70,5 +91,6 @@ module.exports = {
     completeTask,
     markTaskAsIncomplete,
     getIncompleteTasksIds,
-    getTaskName
+    getTaskName,
+    increaseFocusTime
 };

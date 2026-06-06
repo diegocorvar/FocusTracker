@@ -6,7 +6,8 @@ const {
     completeTask,
     markTaskAsIncomplete,
     getIncompleteTasksIds,
-    getTaskName
+    getTaskName,
+    increaseFocusTime
 } = require('./taskController.js');
 
 const path = require("node:path");
@@ -74,5 +75,10 @@ ipcMain.handle('get-incomplete-tasks-ids', async () => {
 
 ipcMain.handle('get-task-name', async (event, filterData) => {
     const result = await getTaskName(filterData);
+    return result;
+});
+
+ipcMain.handle('increase-task-focus-time', async (event, data) => {
+    const result = await increaseFocusTime(data);
     return result;
 });
