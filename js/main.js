@@ -4,7 +4,9 @@ const {
     updateTaskName,
     deleteTask,
     completeTask,
-    incompleteTask
+    markTaskAsIncomplete,
+    getIncompleteTasksIds,
+    getTaskName
 } = require('./taskController.js');
 
 const path = require("node:path");
@@ -61,6 +63,16 @@ ipcMain.handle('complete-task', async (event, taskData) => {
 });
 
 ipcMain.handle('incomplete-task', async (event, taskData) => {
-    const result = await incompleteTask(taskData);
+    const result = await markTaskAsIncomplete(taskData);
+    return result;
+});
+
+ipcMain.handle('get-incomplete-tasks-ids', async () => {
+    const result = await getIncompleteTasksIds();
+    return result;
+});
+
+ipcMain.handle('get-task-name', async (event, filterData) => {
+    const result = await getTaskName(filterData);
     return result;
 });

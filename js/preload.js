@@ -5,5 +5,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
     sendTaskToRename: (data) => ipcRenderer.invoke('rename-task', data),
     sendTaskToDelete: (data) => ipcRenderer.invoke('delete-task', data),
     sendTaskToComplete: (data) => ipcRenderer.invoke('complete-task', data),
-    sendTaskToIncomplete: (data) => ipcRenderer.invoke('incomplete-task', data)
+    sendTaskToIncomplete: (data) => ipcRenderer.invoke('incomplete-task', data),
+    requestIncompleteTasksIds: () => ipcRenderer.invoke('get-incomplete-tasks-ids'),
+    requestTaskName: (data) => ipcRenderer.invoke('get-task-name', data)
 })

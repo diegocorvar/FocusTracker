@@ -2,6 +2,9 @@ const addNewTaskBtn = document.getElementById("add-new-task");
 
 let  currentSelectedTask = null;
 
+
+loadPendingTasks();
+
 /* =============================================================================
 ADD NEW TASK
 ============================================================================= */
@@ -21,6 +24,16 @@ function prepareNewTask() {
 
 function downPanelScroll() {
     taskContainer.scrollTop = taskContainer.scrollHeight;
+}
+
+async function loadPendingTasks() {
+    const tasksIds = await window.electronAPI.requestIncompleteTasksIds();
+    if (!tasksIds) return;
+
+    for(let taskId of tasksIds){
+        const taskName = await window.electronAPI.requestTaskName({id: parseInt(taskId, 10)});
+        addTaskToPanel(addNewTaskBtn, taskId, taskName);
+    }
 }
 
 /* =============================================================================

@@ -36,7 +36,7 @@ async function completeTask({ id }) {
     return result.changes > 0;
 }
 
-async function incompleteTask({ id }) {
+async function markTaskAsIncomplete({ id }) {
     const db = await initializeDatabase();
 
     const query = `UPDATE tasks SET  completed = 0 WHERE id = ?`;
@@ -45,10 +45,30 @@ async function incompleteTask({ id }) {
     return result.changes > 0;
 }
 
+async function getIncompleteTasksIds() {
+    const db = await initializeDatabase();
+
+    const query = `SELECT id FROM tasks WHERE completed = 0`;
+    const rows = await db.all(query);
+
+    return rows.map(row => row.id);
+}
+
+async function getTaskName({ id }) {
+    const db = await initializeDatabase();
+
+    const query = `SELECT name FROM tasks WHERE id = ?`;
+    const row = await db.get(query, [id]);
+
+    return row ? row.name : null;
+}
+
 module.exports = {
     insertNewTask,
     updateTaskName,
     deleteTask,
     completeTask,
-    incompleteTask
+    markTaskAsIncomplete,
+    getIncompleteTasksIds,
+    getTaskName
 };

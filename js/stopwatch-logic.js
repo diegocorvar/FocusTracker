@@ -24,6 +24,7 @@ SPANS
 const secSpan = document.getElementById("seconds-text");
 const minSpan = document.getElementById("minutes-text");
 const hrSpan = document.getElementById("hours-text");
+const taskOnFocusP = document.getElementById("task-on-focus");
 
 /* =============================================================================
 CONTAINERS
@@ -56,6 +57,7 @@ startStopBtn.addEventListener("click", () => {
     stopwatchRunning ? stopStopwatch() : startStopwatch();
     timer();
     toggleStopwatchUI();
+    taskOnFocusP.textContent = currentSelectedTask.querySelector(".task-text").textContent;
 });
 
 const PLAY_ICON = 'play_icon.png';
