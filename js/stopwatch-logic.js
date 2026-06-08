@@ -1,49 +1,6 @@
-let stopwatchRunning = false;
-
 /* =============================================================================
-AUDIOS
+ON PAGE LOAD
 ============================================================================= */
-
-let click_sound_1 = new Audio('../assets/audio/click-sound-1.mp3');
-let click_sound_2 = new Audio('../assets/audio/click-sound-2.mp3');
-
-/* =============================================================================
-BUTTONS
-============================================================================= */
-
-const startStopBtn = document.getElementById("start-stop-btn");
-const restartTimeBtn = document.getElementById("restart-time-btn");
-const finishTrackBtn = document.getElementById("finish-track-btn");
-const enlargeClockBtn = document.getElementById("enlarge-clock-size-btn");
-const shrinkClockBtn = document.getElementById("shrink-clock-size-btn");
-
-/* =============================================================================
-SPANS
-============================================================================= */
-
-const secSpan = document.getElementById("seconds-text");
-const minSpan = document.getElementById("minutes-text");
-const hrSpan = document.getElementById("hours-text");
-const taskOnFocusP = document.getElementById("task-on-focus");
-
-/* =============================================================================
-CONTAINERS
-============================================================================= */
-
-const taskContainer = document.getElementsByClassName("tasks-container")[0];
-const taskOnFocusContainer = document.getElementsByClassName("task-on-focus-container")[0];
-const navMenu = document.getElementById("nav-menu");
-const clockSizeContainer = document.getElementsByClassName("clock-size-options")[0];
-
-
-let totalMiliseconds = 0;
-let miliseconds = 0;
-let seconds = 0;
-let minutes = 0;
-let hours = 0;
-let startTime = undefined;
-
-let currentClockSize = 35;
 
 loadLastSesionTime();
 
@@ -64,11 +21,27 @@ function calculateMiliseconds(secs = 0, mins = 0, hrs = 0) {
 }
 
 /* =============================================================================
+SOUNDS CONTROLLER
+============================================================================= */
+
+startStopBtn.addEventListener("click", () => playSound(BASE_CLICK_SOUND));
+restartTimeBtn.addEventListener("click", () => playSound(BASE_CLICK_SOUND));
+finishSessionTrackBtn.addEventListener("click", () => playSound(3));
+addNewTaskBtn.addEventListener("click", () => playSound(BASE_CLICK_SOUND));
+
+function playSound(sound) {
+    Sounds.forEach(audio => {
+        audio.pause();
+        audio.currentTime = 0;
+    });
+    Sounds[sound].play();
+}
+
+/* =============================================================================
 START STOP BUTTON
 ============================================================================= */
 
 startStopBtn.addEventListener("click", () => {
-    click_sound_1.play();
     stopwatchRunning ? stopStopwatch() : startStopwatch();
     timer();
     toggleStopwatchUI();
@@ -87,10 +60,12 @@ function startStopwatch() {
 
 async function stopStopwatch() {
     changeBtnIcon(startStopBtn, PLAY_ICON);
+    updateCurrentSesionFocusTime(hours, minutes, seconds);
+
     stopwatchRunning = false;
+
     if(currentSelectedTask) await increaseTaskFocusTime(currentSelectedTask);
     totalMiliseconds += Date.now() - startTime;
-    updateCurrentSesionFocusTime(hours, minutes, seconds);
 }
 
 function changeBtnIcon(button, icon) {
@@ -102,11 +77,15 @@ RESTART BUTTON
 ============================================================================= */
 
 restartTimeBtn.addEventListener("click", () => {
-    click_sound_1.play();
+    restartStopwatch();
+    
+});
+
+function restartStopwatch() {
     restartTimeCounters();
     restartTimeSpans();
     updateCurrentSesionFocusTime(0, 0, 0);
-});
+}
 
 function restartTimeSpans() {
     updateStopwatchDigits(0, secSpan);
@@ -122,6 +101,22 @@ function restartTimeCounters() {
     hours = 0;
     startTime = undefined;
 }
+
+/* =============================================================================
+FINISH FOCUS SESSION TRACK BUTTON
+============================================================================= */
+
+finishSessionTrackBtn.addEventListener("click", async () => {
+    const completedTasks = document.querySelectorAll(".finished");
+
+    if (!completedTasks) return;
+
+    for(let task of completedTasks) {
+        if(await setTaskAsComplete(task)) task.remove();
+    }
+    restartStopwatch();
+    toggleShowFinishFocusTrackBtn();
+})
 
 /* =============================================================================
 TIME CONTROLLER
@@ -177,18 +172,19 @@ function switchToSmallClock() {
     unhideElements([
         taskContainer,
         restartTimeBtn,
-        finishTrackBtn,
+        finishSessionTrackBtn,
         navMenu
     ]);
     changeClockSize('10rem');
     changeBackgroundColor('rgb(22,22,22)');
+    toggleShowFinishFocusTrackBtn();
 }
 
 function switchToBigClock() {
     hideElements([
         taskContainer,
         restartTimeBtn,
-        finishTrackBtn,
+        finishSessionTrackBtn,
         navMenu
     ]);
     unhideElements([
@@ -265,3 +261,4 @@ async function getCurrentSesionFocusTime() {
     if (!time) console.log("getCurrentSesionFocusTime failed");
     return time;
 }
+

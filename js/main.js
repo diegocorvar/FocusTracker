@@ -5,11 +5,14 @@ const {
     deleteTask,
     completeTask,
     markTaskAsIncomplete,
-    getIncompleteTasksIds,
+    getIncompleteTasks,
     getTaskName,
     increaseFocusTime,
     updateCurrentFocusTime,
-    getCurrentFocusTime
+    getCurrentFocusTime,
+    setTaskFinishDate,
+    removeTaskFinishDate,
+    searchTask
 } = require('./taskController.js');
 
 const path = require("node:path");
@@ -71,7 +74,7 @@ ipcMain.handle('incomplete-task', async (event, taskData) => {
 });
 
 ipcMain.handle('get-incomplete-tasks-ids', async () => {
-    const result = await getIncompleteTasksIds();
+    const result = await getIncompleteTasks();
     return result;
 });
 
@@ -92,5 +95,20 @@ ipcMain.handle('update-current-focus-time', async (event, data) => {
 
 ipcMain.handle('get-current-focus-time', async (event, data) => {
     const result = await getCurrentFocusTime(data);
+    return result;
+});
+
+ipcMain.handle('set-task-finish-date', async (event, data) => {
+    const result = await setTaskFinishDate(data);
+    return result;
+});
+
+ipcMain.handle('remove-task-finish-date', async (event, data) => {
+    const result = await removeTaskFinishDate(data);
+    return result;
+});
+
+ipcMain.handle('get-task', async (event, data) => {
+    const result = await searchTask(data);
     return result;
 });

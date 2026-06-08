@@ -79,7 +79,14 @@ main {
     opacity: 0.1;
 }
 
-.hide-by-size {
+.task-options.hide-by-size {
+    --element-size: 0;
+
+    scale: var(--element-size);
+    transition: --element-size 0.2s ease;
+}
+
+.popup-message.hide-by-size {
     --element-size: 0;
 
     scale: var(--element-size);

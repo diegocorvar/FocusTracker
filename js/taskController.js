@@ -53,13 +53,13 @@ async function markTaskAsIncomplete({ id }) {
     return result.changes > 0;
 }
 
-async function getIncompleteTasksIds() {
+async function getIncompleteTasks() {
     const db = await initializeDatabase();
 
-    const query = `SELECT id FROM tasks WHERE completed = 0`;
+    const query = `SELECT * FROM tasks WHERE completed = 0`;
     const rows = await db.all(query);
 
-    return rows.map(row => row.id);
+    return rows ? rows : null;
 }
 
 async function getTaskName({ id }) {
@@ -106,15 +106,55 @@ async function getCurrentFocusTime() {
     return row ? row : null;
 }
 
+async function setTaskFinishDate({ id }) {
+    const db = await initializeDatabase();
+
+    const query = `
+        UPDATE tasks
+        SET completionDate = date('now', 'localtime')
+        WHERE id = ?
+    `;
+
+    const result = await db.run(query, [id]);
+
+    return result.changes > 0;
+}
+
+async function removeTaskFinishDate({ id }) {
+    const db = await initializeDatabase();
+
+    const query = `
+        UPDATE tasks
+        SET completionDate = NULL
+        WHERE id = ?
+    `;
+
+    const result = await db.run(query, [id]);
+
+    return result.changes > 0;
+}
+
+async function searchTask({ id }) {
+    const db = await initializeDatabase();
+
+    const query = `SELECT * FROM tasks WHERE id = ?`;
+    const row = await db.get(query, [id]);
+
+    return row ? row : null;
+}
+
 module.exports = {
     insertNewTask,
     updateTaskName,
     deleteTask,
     completeTask,
     markTaskAsIncomplete,
-    getIncompleteTasksIds,
+    getIncompleteTasks,
     getTaskName,
     increaseFocusTime,
     updateCurrentFocusTime,
-    getCurrentFocusTime
+    getCurrentFocusTime,
+    setTaskFinishDate,
+    removeTaskFinishDate,
+    searchTask
 };

@@ -1,16 +1,24 @@
-const addNewTaskBtn = document.getElementById("add-new-task");
-
-let  currentSelectedTask = null;
-
+/* =============================================================================
+ON PAGE LOAD
+============================================================================= */
 
 loadPendingTasks();
 
+async function loadPendingTasks() {
+    const tasks = await window.electronAPI.requestIncompleteTasks();
+    if (!tasks) return;
+
+    for(let task of tasks){
+        await addTaskToPanel(addNewTaskBtn, task.id, task.name);
+    }
+    toggleShowFinishFocusTrackBtn();
+}
+
 /* =============================================================================
-ADD NEW TASK
+ADD NEW TASK BTN
 ============================================================================= */
 
 addNewTaskBtn.addEventListener("click", () => {
-    click_sound_2.play();
     const taskOptions = prepareNewTask();
     taskOptions.style.setProperty("--element-size", 1);
 });
@@ -27,18 +35,8 @@ function downPanelScroll() {
     taskContainer.scrollTop = taskContainer.scrollHeight;
 }
 
-async function loadPendingTasks() {
-    const tasksIds = await window.electronAPI.requestIncompleteTasksIds();
-    if (!tasksIds) return;
-
-    for(let taskId of tasksIds){
-        const taskName = await window.electronAPI.requestTaskName({id: parseInt(taskId, 10)});
-        addTaskToPanel(addNewTaskBtn, taskId, taskName);
-    }
-}
-
 /* =============================================================================
-OPEN TASK OPTIONS
+TASK OPTIONS CONTROLLER
 ============================================================================= */
 
 function openTaskOptions(referenceElement, taskName = '', taskId = '') {
@@ -69,7 +67,7 @@ function openTaskOptions(referenceElement, taskName = '', taskId = '') {
                 >
             </div>
         </li>
-    `
+    `;
 
     referenceElement.insertAdjacentHTML("beforebegin", taskOptions);
     const openedOptions = referenceElement.previousElementSibling;
@@ -77,13 +75,16 @@ function openTaskOptions(referenceElement, taskName = '', taskId = '') {
     return openedOptions;
 }
 
-/* ====== SAVE BUTTON ====== */
+/* --------------------------------------------------------------------------
+WHITIN TASK OPTIONS: SAVE TASK BUTTON
+-------------------------------------------------------------------------- */
 
 function enableSaveBtn(task, btnBehavior) {
     const saveBtn = task.querySelector(".save-task-btn");
     const taskInput = task.querySelector(".task-text-inpt");
 
     saveBtn.addEventListener("click", async () => {
+        playSound(7);
         const taskName = taskInput.value;
         if (taskName.trim() != ""){
             const taskId = await btnBehavior(task);
@@ -92,10 +93,16 @@ function enableSaveBtn(task, btnBehavior) {
         else{
             showErrorOnElement(task.querySelector(".task-text-inpt"));
         }
+
+        if (task.id) playSound(SAVE_TASK_CHANGES_SOUND);
+        else playSound(SAVE_NEW_TASK_SOUND);
     });
 }
 
-/* ====== DELETE BUTTON ====== */
+
+/* --------------------------------------------------------------------------
+WHITIN TASK OPTIONS: DELETE TASK BUTTON
+-------------------------------------------------------------------------- */
 
 function enableDeleteBtn(task) {
     const deleteBtn = task.querySelector(".delete-task-btn");
@@ -104,8 +111,13 @@ function enableDeleteBtn(task) {
         const warningMessage = task.querySelector(".popup-message");
         warningMessage.style.setProperty("--element-size", 1);
         enableDeleteConfirmMessage(task);
+        playSound(BASE_CLICK_SOUND);
     });
 }
+
+/* --------------------------------------------------------------------------
+WHITIN TASK OPTIONS: WARNING MESSAGE FOR DELETE TASK BUTTON
+-------------------------------------------------------------------------- */
 
 function enableDeleteConfirmMessage(task) {
     const warningMessage = task.querySelector(".popup-message");
@@ -118,12 +130,22 @@ function enableDeleteConfirmMessage(task) {
                 console.log("error deleting the task");
                 return
             }
+        if(currentSelectedTask.id === task.id) {
+            currentSelectedTask = null;
+            taskOnFocusP.textContent = "Something";
+        } 
         exitTaskOptions(task);
+        playSound(DELETE_TASK_SOUND);
     });
     cancelDeleteBtn.addEventListener("click", () => {
+        playSound(BASE_CLICK_SOUND);
         warningMessage.style.setProperty("--element-size", 0);
     })
 }
+
+/* --------------------------------------------------------------------------
+TASK OPTIONS LOGIC
+-------------------------------------------------------------------------- */
 
 function exitTaskOptions(task, taskId = null, taskName = null) {
     switchElementsAvailability(renableElements);
@@ -167,7 +189,7 @@ function showErrorOnElement(element) {
 ADD TASK TO PANEL
 ============================================================================= */
 
-function addTaskToPanel(referenceElement, taskId, taskName) {
+async function addTaskToPanel(referenceElement, taskId, taskName) {
     const task = `
         <li id="${taskId}" class="task">
             <div>
@@ -179,28 +201,46 @@ function addTaskToPanel(referenceElement, taskId, taskName) {
                 src="../assets/icons/task_options_icon.png"
             >
         </li>
-    `
+    `;
 
     referenceElement.insertAdjacentHTML("beforebegin", task);
     const taskAdded = referenceElement.previousElementSibling;
-    enableSettingsBtn(taskAdded, taskName);
-    enableToSelectTask(taskAdded);
-    enableCheckBoxTask(taskAdded);
+    enableTaskFeatures(taskAdded);
+
+    if ((await getTask(taskAdded)).completionDate){
+        taskAdded.classList.add("finished");
+        taskAdded.querySelector(".task-checkbox").checked = true;
+    }
+
+    return taskAdded;
 }
 
-function enableSettingsBtn(task, taskName) {
+function enableTaskFeatures(task) {
+    enableSettingsBtn(task);
+    enableToSelectTask(task);
+    enableCheckBoxTask(task);
+}
+
+function enableSettingsBtn(task) {
     const taskSettingsBtn = task.querySelector(".task-settings-btn");
+    const taskName = task.querySelector(".task-text").textContent;
 
     taskSettingsBtn.addEventListener("click", () => {
         const taskOptions = openTaskOptions(task, taskName, task.id);
         taskOptions.style.setProperty("--element-size", 1);
         enableSaveBtn(taskOptions, renameTask);
         enableDeleteBtn(taskOptions);
+        playSound(BASE_CLICK_SOUND);
         task.remove();
     });
 }
 
 function enableToSelectTask(task) {
+    task.addEventListener("click", () => {
+        if (task.classList.contains("selected")) return;
+        if (task.classList.contains("finished")) return;
+        playSound(BASE_CLICK_SOUND);
+    });
     task.addEventListener("click", () => {
         const checkBoxTask = task.querySelector(".task-checkbox");
 
@@ -219,19 +259,36 @@ function enableCheckBoxTask(task) {
 
     checkBoxTask.addEventListener("click", async () => {
         if (!checkBoxTask.checked) {
-            await setTaskAsIncomplete(task);
-            task.classList.remove("finished");
+            if (await removeFinishDateOf(task)){
+                task.classList.remove("finished");
+                playSound(BASE_CLICK_SOUND);
+            }
         }
         else {
-            await setTaskAsComplete(task);
-            task.classList.add("finished");
+            if (await setFinishDateTo(task)) {
+                task.classList.add("finished");
+                playSound(6);
+            }
+                
         }
         if(currentSelectedTask === task) {
             currentSelectedTask.classList.remove("selected");
             currentSelectedTask = null;
             taskOnFocusP.textContent = "Something";
         }
+        toggleShowFinishFocusTrackBtn();
     });
+}
+
+function toggleShowFinishFocusTrackBtn() {
+    const completedTasks = document.querySelectorAll(".finished");
+
+    if(completedTasks.length) {
+        finishSessionTrackBtn.classList.remove("hide");
+    }
+    else {
+        finishSessionTrackBtn.classList.add("hide");
+    }
 }
 
 /* =============================================================================
@@ -276,5 +333,29 @@ async function setTaskAsIncomplete(task) {
     const data = {id: taskId};
     const result = await window.electronAPI.sendTaskToIncomplete(data);
     if (!result) console.log("setTaskAsIncomplete failed");
+    return result;
+}
+
+async function setFinishDateTo(task) {
+    const taskId = parseInt(task.id, 10);
+    const data = {id: taskId};
+    const result = await window.electronAPI.sendTaskToSetFinishDate(data);
+    if (!result) console.log("setFinishDateTo failed");
+    return result;
+}
+
+async function removeFinishDateOf(task) {
+    const taskId = parseInt(task.id, 10);
+    const data = {id: taskId};
+    const result = await window.electronAPI.sendTaskToRemoveFinishDate(data);
+    if (!result) console.log("removeFinishDateOf failed");
+    return result;
+}
+
+async function getTask(task) {
+    const taskId = parseInt(task.id, 10);
+    const data = {id: taskId};
+    const result = await window.electronAPI.requestTask(data);
+    if (!result) console.log("getTask failed");
     return result;
 }
