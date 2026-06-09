@@ -1,3 +1,18 @@
+const monthsAbreviations = [
+    "JAN",
+    "FEB",
+    "MAR",
+    "APR",
+    "MAY",
+    "JUN",
+    "JUL",
+    "AUG",
+    "SEP",
+    "OCT",
+    "NOV",
+    "DEC"
+]
+
 /* =============================================================================
 AUDIOS
 ============================================================================= */
@@ -32,6 +47,8 @@ const shrinkClockBtn = document.getElementById("shrink-clock-size-btn");
 const addNewTaskBtn = document.getElementById("add-new-task");
 const stopwatchNavBtn = document.getElementById("show-stopwatch-window");
 const reportsNavBtn = document.getElementById("show-reports-window");
+const previousPeriodBtn = document.getElementById("previous-time-period-btn");
+const nextPeriodBtn = document.getElementById("next-time-period-btn");
 
 /* =============================================================================
 SPANS
@@ -41,6 +58,7 @@ const secSpan = document.getElementById("seconds-text");
 const minSpan = document.getElementById("minutes-text");
 const hrSpan = document.getElementById("hours-text");
 const taskOnFocusP = document.getElementById("task-on-focus");
+const currentPeriodText = document.getElementById("current-period-text");
 
 /* =============================================================================
 CONTAINERS
@@ -53,6 +71,12 @@ const clockSizeContainer = document.getElementsByClassName("clock-size-options")
 const stopwatchWindow = document.getElementById("stopwatch-window");
 const reportsWindow = document.getElementById("reports-window");
 const chartTaskListPanel = document.querySelector(".chart-data-list-panel");
+
+/* =============================================================================
+CHARTS
+============================================================================= */
+
+let myPieChart = null
 
 /* =============================================================================
 GLOBAL VARIABLES
@@ -70,4 +94,6 @@ let startTime = undefined;
 let currentClockSize = 35;
 
 let  currentSelectedTask = null;
+
+let currentPeriodType = "DAY";
 
