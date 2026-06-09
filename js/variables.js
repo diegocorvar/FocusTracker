@@ -1,4 +1,4 @@
-const monthsAbreviations = [
+const monthsAbbreviations = [
     "JAN",
     "FEB",
     "MAR",
@@ -12,6 +12,10 @@ const monthsAbreviations = [
     "NOV",
     "DEC"
 ]
+
+const A_DAY = 1;
+const SEVEN_DAYS = 7;
+const THIRY_DAYS = 30;
 
 /* =============================================================================
 AUDIOS
@@ -47,8 +51,11 @@ const shrinkClockBtn = document.getElementById("shrink-clock-size-btn");
 const addNewTaskBtn = document.getElementById("add-new-task");
 const stopwatchNavBtn = document.getElementById("show-stopwatch-window");
 const reportsNavBtn = document.getElementById("show-reports-window");
-const previousPeriodBtn = document.getElementById("previous-time-period-btn");
-const nextPeriodBtn = document.getElementById("next-time-period-btn");
+const previousIntervalBtn = document.getElementById("previous-time-interval-btn");
+const nextIntervalBtn = document.getElementById("next-time-interval-btn");
+const dailyIntervalOptionBtn = document.getElementById("day-interval-option-btn");
+const weeklyIntervalOptionBtn = document.getElementById("week-interval-option-btn");
+const monthlyIntervalOptionBtn = document.getElementById("month-interval-option-btn");
 
 /* =============================================================================
 SPANS
@@ -58,7 +65,8 @@ const secSpan = document.getElementById("seconds-text");
 const minSpan = document.getElementById("minutes-text");
 const hrSpan = document.getElementById("hours-text");
 const taskOnFocusP = document.getElementById("task-on-focus");
-const currentPeriodText = document.getElementById("current-period-text");
+const timeIntervalText = document.getElementById("current-interval-text");
+const timeIntervalTitle = document.querySelectorAll(".time-interval-option-text")[0];
 
 /* =============================================================================
 CONTAINERS
@@ -71,12 +79,15 @@ const clockSizeContainer = document.getElementsByClassName("clock-size-options")
 const stopwatchWindow = document.getElementById("stopwatch-window");
 const reportsWindow = document.getElementById("reports-window");
 const chartTaskListPanel = document.querySelector(".chart-data-list-panel");
+const chartTasksContainer = document.querySelector(".chart-data-list-container");
+const inactivityMsgContainer = document.querySelector(".inactivity-message-container");
 
 /* =============================================================================
 CHARTS
 ============================================================================= */
 
-let myPieChart = null
+let myPieChart = null;
+let myBarChart = null;
 
 /* =============================================================================
 GLOBAL VARIABLES
@@ -95,5 +106,5 @@ let currentClockSize = 35;
 
 let  currentSelectedTask = null;
 
-let currentPeriodType = "DAY";
+let currentIntervalType = "DAY";
 

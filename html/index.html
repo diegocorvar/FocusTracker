@@ -91,28 +91,32 @@
 
             <!-- REPORTS WINDOW -->
             <div id ="reports-window" class="window">
-                <!-- TIME PERIOD OPTIONS -->
-                <div class="time-period-options-nav">
-                    <span class="time-period-option-text">DAY</span>
-                    <div class="current-time-period-container">
-                        <button id="previous-time-period-btn" class="action-btn">
+                <!-- TIME INTERVAL OPTIONS -->
+                <div class="time-interval-options-nav">
+                    <span class="time-interval-option-text">DAY</span>
+                    <div class="current-time-interval-container">
+                        <button id="previous-time-interval-btn" class="action-btn">
                             <img class="btn-icon"
                             src="../assets/icons/left_arrow_icon.png">
                         </button>
-                        <span id="current-period-text" class="time-period-option-text"></span>
-                        <button id="next-time-period-btn" class="action-btn">
+                        <span id="current-interval-text" class="time-interval-option-text"></span>
+                        <button id="next-time-interval-btn" class="action-btn">
                             <img class="btn-icon"
                             src="../assets/icons/right_arrow_icon.png">
                         </button>
                     </div>
-                    <div class="time-period-options">
-                        <button class="time-period-option-btn">DAY</button>
-                        <button class="time-period-option-btn">WEEK</button>
-                        <button class="time-period-option-btn">MONTH</button>
+                    <div class="time-interval-options">
+                        <button id="day-interval-option-btn" class="time-interval-option-btn" title="Review reports by day">DAY</button>
+                        <button id="week-interval-option-btn" class="time-interval-option-btn" title="Review last 7 days reports">WEEK</button>
+                        <button id="month-interval-option-btn" class="time-interval-option-btn" title="Review last 30 days reports">MONTH</button>
                     </div>
                 </div>
                 <!-- CHARTS -->
                 <div class="charts-container">
+                    <div class="inactivity-message-container hide">
+                        <img src="../assets/icons/spleepy_dog_icon.png">
+                        <span>There is not activity to report</span>
+                    </div>
                     <div class="canvas-container">
                         <canvas id="current-chart"></canvas>
                     </div>

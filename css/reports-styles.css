@@ -1,4 +1,4 @@
-.time-period-options-nav {
+.time-interval-options-nav {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
@@ -6,41 +6,41 @@
     width: 100%;
 }
 
-.time-period-options-nav > span {
+.time-interval-options-nav > span {
     flex: 1;
     margin-left: 20px;
 }
 
-.current-time-period-container {
+.current-time-interval-container {
     display: flex;
     justify-content: center;
     flex: 1;
     align-items: center;
 }
 
-.current-time-period-container * {
+.current-time-interval-container * {
     display: inline-block;
 }
 
-.time-period-option-text {
+.time-interval-option-text {
     font-family: 'Determination';
     color: white;
     font-size: 1.5rem;
 }
 
-.time-period-options {
+.time-interval-options {
     flex: 1;
     display: flex;
     justify-content: flex-end;
     gap: 1em;
 }
 
-.time-period-options:last-child {
+.time-interval-options:last-child {
     box-sizing: border-box;
     margin-right: 20px;
 }
 
-.time-period-option-btn {
+.time-interval-option-btn {
     cursor: pointer;
 
     background-color: transparent;
@@ -52,10 +52,13 @@
 
     border: 1px solid var(--selected-task-border-color);
     border-radius: 0.2em;
+
+    transition: scale 0.2s ease;
 }
 
-.time-period-option-btn:hover {
+.time-interval-option-btn:hover {
     background-color: var(--selected-task-bg-color);
+    scale: 1.05;
 }
 
 /*===========================================
@@ -64,7 +67,8 @@ CHARTS
 
 .charts-container {
     display: flex;
-    justify-content: space-between;
+    position: relative;
+    justify-content: space-around;
     align-items: center;
     width: 100%;
     flex: 1;
@@ -142,3 +146,31 @@ CHARTS
     background-color: var(--task-color);
 }
 
+.inactivity-message-container {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--main-bg-color1);
+    z-index: 9999;
+    gap: 1em;
+}
+
+.inactivity-message-container * {
+    user-select: none;
+}
+
+.inactivity-message-container img {
+    width: 10%;
+}
+
+.inactivity-message-container span {
+    font-family: 'Determination';
+    color: #a2d3ee;
+    font-size: 2rem;
+}

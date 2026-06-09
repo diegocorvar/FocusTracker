@@ -152,6 +152,19 @@ async function searchCompletedTasksByDay({ day }) {
     return rows ? rows : null;
 }
 
+async function getTotalFocusTimePerDay({ day }) {
+    const db = await initializeDatabase();
+
+    const query = `
+        SELECT completionDate AS date, IFNULL(SUM(focusTimeInSec), 0) AS totalSec
+        FROM tasks
+        WHERE completionDate = ?
+    `;
+    const row = await db.get(query, [day]);
+
+    return row ? row : null;
+}
+
 module.exports = {
     insertNewTask,
     updateTaskName,
@@ -166,5 +179,6 @@ module.exports = {
     setTaskFinishDate,
     removeTaskFinishDate,
     searchTask,
-    searchCompletedTasksByDay
+    searchCompletedTasksByDay,
+    getTotalFocusTimePerDay
 };
