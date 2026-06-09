@@ -12,7 +12,8 @@ const {
     getCurrentFocusTime,
     setTaskFinishDate,
     removeTaskFinishDate,
-    searchTask
+    searchTask,
+    searchCompletedTasksByDay
 } = require('./taskController.js');
 
 const path = require("node:path");
@@ -110,5 +111,10 @@ ipcMain.handle('remove-task-finish-date', async (event, data) => {
 
 ipcMain.handle('get-task', async (event, data) => {
     const result = await searchTask(data);
+    return result;
+});
+
+ipcMain.handle('get-completed-tasks-by-day', async (event, data) => {
+    const result = await searchCompletedTasksByDay(data);
     return result;
 });

@@ -125,15 +125,18 @@ function enableDeleteConfirmMessage(task) {
     const cancelDeleteBtn = task.querySelector(".negative-btn");
 
     confirmDeleteBtn.addEventListener("click", async () => {
-        if(task.id) 
+        if(task.id) {
             if(await !deleteTask(task)) {
                 console.log("error deleting the task");
                 return
             }
-        if(currentSelectedTask.id === task.id) {
-            currentSelectedTask = null;
-            taskOnFocusP.textContent = "Something";
+            if(currentSelectedTask.id === task.id) {
+                currentSelectedTask = null;
+                taskOnFocusP.textContent = "Something";
+            } 
         } 
+            
+        
         exitTaskOptions(task);
         playSound(DELETE_TASK_SOUND);
     });

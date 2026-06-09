@@ -13,5 +13,6 @@ contextBridge.exposeInMainWorld('electronAPI', {
     requestCurrentFocusTime: () => ipcRenderer.invoke('get-current-focus-time'),
     sendTaskToSetFinishDate: (data) => ipcRenderer.invoke('set-task-finish-date', data),
     sendTaskToRemoveFinishDate: (data) => ipcRenderer.invoke('remove-task-finish-date', data),
-    requestTask: (data) => ipcRenderer.invoke('get-task', data)
+    requestTask: (data) => ipcRenderer.invoke('get-task', data),
+    requestCompletedTasksByDay: (data) => ipcRenderer.invoke('get-completed-tasks-by-day', data)
 })

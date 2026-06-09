@@ -143,6 +143,15 @@ async function searchTask({ id }) {
     return row ? row : null;
 }
 
+async function searchCompletedTasksByDay({ day }) {
+    const db = await initializeDatabase();
+
+    const query = `SELECT * FROM tasks WHERE completionDate = ?`;
+    const rows = await db.all(query, [day]);
+
+    return rows ? rows : null;
+}
+
 module.exports = {
     insertNewTask,
     updateTaskName,
@@ -156,5 +165,6 @@ module.exports = {
     getCurrentFocusTime,
     setTaskFinishDate,
     removeTaskFinishDate,
-    searchTask
+    searchTask,
+    searchCompletedTasksByDay
 };

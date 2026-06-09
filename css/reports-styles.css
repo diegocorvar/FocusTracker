@@ -1,0 +1,144 @@
+.time-period-options-nav {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+}
+
+.time-period-options-nav > span {
+    flex: 1;
+    margin-left: 20px;
+}
+
+.current-time-period-container {
+    display: flex;
+    justify-content: center;
+    flex: 1;
+    align-items: center;
+}
+
+.current-time-period-container * {
+    display: inline-block;
+}
+
+.time-period-option-text {
+    font-family: 'Determination';
+    color: white;
+    font-size: 1.5rem;
+}
+
+.time-period-options {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    gap: 1em;
+}
+
+.time-period-options:last-child {
+    box-sizing: border-box;
+    margin-right: 20px;
+}
+
+.time-period-option-btn {
+    cursor: pointer;
+
+    background-color: transparent;
+    color: white;
+
+    font-family: 'Determination';
+    font-size: 1.5rem;
+    padding: 0.3em 1em;
+
+    border: 1px solid var(--selected-task-border-color);
+    border-radius: 0.2em;
+}
+
+.time-period-option-btn:hover {
+    background-color: var(--selected-task-bg-color);
+}
+
+/*===========================================
+CHARTS
+===========================================*/
+
+.charts-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    flex: 1;
+    background-color: transparent;
+}
+
+.canvas-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 70%;
+    width: 50%;
+    transform: translateY(-6%);
+    background-color: transparent;
+}
+
+.chart-data-list-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    height: 100%;
+    background-color: transparent ;
+}
+
+.chart-data-list-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    margin: 0;
+    box-sizing: border-box;
+    padding: 2em 0;
+    list-style-type: none;
+    
+    border-radius: 2%;
+    border: 1px solid var(--selected-task-border-color);
+
+    width: 60%;
+    max-height: 60vh;
+    transform: translateY(-6%);
+
+    overflow-y: scroll;
+}
+
+.chart-data-item {
+    display: flex;
+    justify-content: space-between;
+    cursor: default;
+    box-sizing: border-box;
+    padding: 1em;
+
+    font-family: 'Determination';
+    color: white;
+
+    width: 80%;
+
+    border-bottom: 1px solid var(--selected-task-border-color);
+
+    --task-color: #000;
+}
+
+.chart-task-text:before {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+
+    vertical-align: bottom;
+    content: " ";
+    
+    margin-right: 1em;
+
+    border-radius: 50%;
+    border: 1px solid #000;
+    background-color: var(--task-color);
+}
+

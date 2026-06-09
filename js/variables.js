@@ -30,6 +30,8 @@ const finishSessionTrackBtn = document.getElementById("finish-track-btn");
 const enlargeClockBtn = document.getElementById("enlarge-clock-size-btn");
 const shrinkClockBtn = document.getElementById("shrink-clock-size-btn");
 const addNewTaskBtn = document.getElementById("add-new-task");
+const stopwatchNavBtn = document.getElementById("show-stopwatch-window");
+const reportsNavBtn = document.getElementById("show-reports-window");
 
 /* =============================================================================
 SPANS
@@ -48,6 +50,9 @@ const taskContainer = document.getElementsByClassName("tasks-container")[0];
 const taskOnFocusContainer = document.getElementsByClassName("task-on-focus-container")[0];
 const navMenu = document.getElementById("nav-menu");
 const clockSizeContainer = document.getElementsByClassName("clock-size-options")[0];
+const stopwatchWindow = document.getElementById("stopwatch-window");
+const reportsWindow = document.getElementById("reports-window");
+const chartTaskListPanel = document.querySelector(".chart-data-list-panel");
 
 /* =============================================================================
 GLOBAL VARIABLES

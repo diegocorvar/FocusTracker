@@ -1,0 +1,228 @@
+.task-options.hide-by-size {
+    --element-size: 0;
+
+    scale: var(--element-size);
+    transition: --element-size 0.2s ease;
+}
+
+
+/*===========================================
+TASKS
+===========================================*/
+
+.tasks-section {
+    display: flex;
+    justify-content: center;
+    flex: 1;
+    width: 100%;
+}
+
+.tasks-container {
+    list-style-type: none;
+    box-sizing: border-box;
+    width: 25%;
+    max-height: 50vh;
+
+    overflow-y: auto;
+
+    background-color: var(--main-bg-color2);
+
+    border-radius: 5%;
+    border: 1px solid var(--transparent-white);
+
+    padding: 2rem;
+    margin-top: 2em;
+}
+
+.tasks-container::-webkit-scrollbar {
+    display: none;
+}
+
+.task {
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 1.5em 1em 1.5em;
+    border-bottom: 1px solid var(--transparent-white);
+    border-radius: 5%;
+
+    transition: background-color 0.2s ease;
+}
+
+.task div {
+    display: flex;
+    justify-self: space-between;
+    align-items: center;
+    gap: 0.5em;
+}
+
+.task-checkbox {
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+
+    width: 1.2rem;
+    height: 1.2rem;
+    transform: translateY(-1px);
+    border: 1px solid rgba(175, 175, 175, 50%);
+}
+
+.task-checkbox::after {
+    content: ' ';
+}
+
+.task-checkbox:checked {
+    background-color: green;
+}
+
+.task-checkbox:checked::after {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    content: '✓';
+    font-weight: bold;
+    color: white;
+}
+
+.task-text {
+    color: var(--time-digit-text-color);
+    font-family: 'Determination';
+    letter-spacing: 1px;
+    user-select: none;
+}
+
+.task:hover {
+    background-color: var(--selected-task-bg-color);
+}
+
+.selected {
+    background-color: var(--selected-task-bg-color);
+    border: 1px solid var(--selected-task-border-color);
+}
+
+.selected:hover {
+    background-color: var(--selected-task-bg-color);
+}
+
+.finished {
+    background-color: var(--finished-task-bg-color);
+}
+
+.finished:hover {
+    background-color: var(--finished-task-bg-color);
+}
+
+.finished .task-text {
+    text-decoration: line-through;
+}
+
+.finished:hover, .selected:hover {
+    cursor: default;
+}
+
+#add-new-task {
+    border-bottom: 3px dotted var(--transparent-white);
+    border-radius: 10%;
+    outline-color: transparent;
+
+    transition: outline 0.3s ease;
+}
+
+#add-new-task:hover {
+    outline: 3px dotted var(--transparent-white);
+    border-bottom: none;
+    background-color: transparent;
+}
+
+.task-icon {
+    filter: invert();
+    height: 1.2rem;
+    vertical-align: top;
+}
+
+.task-on-focus-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: top;
+    gap: 0.1rem;
+}
+
+.task-on-focus-container h2 {
+    font-family: 'Determination';
+    font-size: 1rem;
+    color: rgb(131, 131, 131);
+    text-align: center;
+    margin-bottom: 0;
+    user-select: none;
+}
+
+#task-on-focus {
+    border-bottom: 1px solid var(--selected-task-border-color);
+    margin: 0;
+    text-align: center;
+}
+
+/*===========================================
+TASKS OPTIONS
+===========================================*/
+
+.task-options {
+    padding: 3em 1em 3em;
+}
+
+.task-options-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.task-settings-btn {
+    cursor: pointer;
+    filter: invert() brightness(20%);
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.task-settings-btn:hover {
+    transform: scale(1.15);
+    filter: invert() brightness(100%);
+}
+
+.task-settings-btn:active {
+    transform: scale(0.85);
+}
+
+.delete-task-btn {
+    height: 1.5rem;
+}
+
+.delete-task-btn:hover {
+    filter: invert(13%) sepia(80%) saturate(4095%) hue-rotate(348deg) brightness(107%) contrast(90%);
+}
+
+.task-text-inpt {
+    font-family: 'Determination';
+    color: white;
+    background-color: transparent;
+
+    border: none;
+    border-bottom: 1px dashed var(--selected-task-border-color);
+
+    box-sizing: border-box;
+    padding: 0.5em 0.2em 0.5em;
+
+    width: auto;
+}
+
+.task-text-inpt:focus {
+    outline: none;
+}
+
+.delete-task-btn-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.delete-task-btn-container {
+    position: relative;
+}

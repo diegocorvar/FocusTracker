@@ -1,0 +1,104 @@
+/*===========================================
+STOPWATCH
+===========================================*/
+
+.clock-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 3%;
+}
+
+.time-unit-text {
+    position: relative;
+    color: var(--time-digit-text-color);
+    font-family: 'Akzidenz-Grotesk BQ Condensed';
+    font-weight: bold;
+    font-size: var(--clock-size);
+    letter-spacing: 5px;
+    
+    display: flex;
+    align-items: center;
+
+    transition: --clock-size 0.5s ease;
+
+    user-select: none;
+    padding: 0 0.1em 0;
+    margin-left: 10px;
+
+    background-color: var(--time-digit-bg-color);
+
+    border-radius: 20px;
+}
+
+.time-unit-text::after {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    content: ' ';
+    width: 100%;
+    border-bottom: 3px solid var(--time-digit-bg-color);
+}
+
+.unit-separator {
+    font-size: 4rem;
+    margin-left: 15px;
+    margin-right: 0px;
+    line-height: 1;
+    display: inline-block;
+}
+
+.clock-size-options {
+    position: absolute !important;
+    top: -70px;
+}
+
+/*===========================================
+ACTION BUTTONS
+===========================================*/
+
+.action-btn-container {
+    margin-top: 2em;
+    display: flex;
+    justify-content: center;
+    gap: 3em;
+    width: 100%;
+}
+
+.action-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 50px;
+    height: 50px;
+    background-color: transparent;
+
+    cursor: pointer;
+
+    transition: transform 0.9s ease;
+
+    border: none;
+}
+
+.btn-icon {
+    filter: invert();
+    max-width: 50%;
+    transition: transform 0.3s ease;
+}
+
+.action-btn:hover .btn-icon {
+    transform: scale(1.20);
+}
+
+.action-btn:active .btn-icon {
+    transform: scale(0.8);
+}
+
+.discreet-btn {
+    filter: brightness(25%);
+}
+
+.discreet-btn:hover {
+    filter: brightness(100%);
+}

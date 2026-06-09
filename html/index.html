@@ -4,8 +4,11 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>FocusTracker</title>
-        <link rel="stylesheet" href="../css/nav-styles.css">
         <link rel="stylesheet" href="../css/general-styles.css">
+        <link rel="stylesheet" href="../css/nav-styles.css">
+        <link rel="stylesheet" href="../css/stopwatch-styles.css">
+        <link rel="stylesheet" href="../css/task-styles.css">
+        <link rel="stylesheet" href="../css/reports-styles.css">
         <link rel="stylesheet" href="../css/normalize.css">
     </head>
     <body>
@@ -25,7 +28,7 @@
             </nav>
 
             <!-- STOPWATCH WINDOW -->
-            <div class="window">
+            <div id ="stopwatch-window" class="window">
                 <!-- STOPWATCH -->
                 <div class="nav-options-container clock-size-options hide">
                     <button id="shrink-clock-size-btn" class="action-btn discreet-btn" title="Shrink clock size">
@@ -87,11 +90,46 @@
             </div>
 
             <!-- REPORTS WINDOW -->
-            <div class="window hide-window"></div>
+            <div id ="reports-window" class="window">
+                <!-- TIME PERIOD OPTIONS -->
+                <div class="time-period-options-nav">
+                    <span class="time-period-option-text">DAY</span>
+                    <div class="current-time-period-container">
+                        <button class="action-btn">
+                            <img class="btn-icon"
+                            src="../assets/icons/left_arrow_icon.png">
+                        </button>
+                        <span class="time-period-option-text">08-JUN</span>
+                        <button class="action-btn">
+                            <img class="btn-icon"
+                            src="../assets/icons/right_arrow_icon.png">
+                        </button>
+                    </div>
+                    <div class="time-period-options">
+                        <button class="time-period-option-btn">DAY</button>
+                        <button class="time-period-option-btn">WEEK</button>
+                        <button class="time-period-option-btn">MONTH</button>
+                    </div>
+                </div>
+                <!-- CHARTS -->
+                <div class="charts-container">
+                    <div class="canvas-container">
+                        <canvas id="current-chart"></canvas>
+                    </div>
+                    <div class="chart-data-list-container">
+                        <ul class="chart-data-list-panel">
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </main>
+
+        <script src="../node_modules/chart.js/dist/chart.umd.js" defer></script>
+        <script src="../node_modules/chartjs-plugin-autocolors/dist/chartjs-plugin-autocolors.min.js"></script>
         <script src="../js/variables.js" defer></script>
+        <script src="../js/navbar-logic.js" defer></script>
         <script src="../js/stopwatch-logic.js" defer></script>
         <script src="../js/taskPanel-logic.js" defer></script>
-        
+        <script src="../js/reports-logic.js" defer></script>
     </body>
 </html>
